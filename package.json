@@ -1,0 +1,22 @@
+{
+  "name": "slack-chat",
+  "version": "0.0.1",
+  "description": "Chat similar to slack on react",
+  "main": "index.js",
+  "scripts": {
+    "start": "npx start-server -s ./frontend/build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/denikeev/frontend-project-12.git"
+  },
+  "author": "denikeev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/denikeev/frontend-project-12/issues"
+  },
+  "homepage": "https://github.com/denikeev/frontend-project-12#readme",
+  "dependencies": {
+    "@hexlet/chat-server": "^1.1.6"
+  }
+}
