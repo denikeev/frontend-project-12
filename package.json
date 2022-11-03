@@ -2,7 +2,7 @@
   "name": "slack-chat",
   "version": "0.0.1",
   "description": "Chat similar to slack on react",
-  "main": "index.js",
+  "main": "frontend/src/index.js",
   "scripts": {
     "start": "npx start-server -s ./frontend/build"
   },
