@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
 
-const Login = () => {
+const LoginPage = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'forms.login' });
 
   const formik = useFormik({
@@ -29,7 +29,7 @@ const Login = () => {
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
           value={formik.values.name}
-          autocomplete="off"
+          autoComplete="off"
         />
         {formik.touched.name && formik.errors.name ? (
           <div>{formik.errors.name}</div>
@@ -56,4 +56,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default LoginPage;

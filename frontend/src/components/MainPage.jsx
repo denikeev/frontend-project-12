@@ -1,7 +1,7 @@
 import logo from '../logo.svg';
 import '../App.css';
 
-const RootRoute = () => (
+const MainPage = () => (
   <div className="App">
     <header className="App-header">
       <img src={logo} className="App-logo" alt="logo" />
@@ -22,4 +22,4 @@ const RootRoute = () => (
   </div>
 );
 
-export default RootRoute;
+export default MainPage;
