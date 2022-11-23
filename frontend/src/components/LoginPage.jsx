@@ -5,8 +5,7 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useDispatch } from 'react-redux';
 
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
+import { Form, Button } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { logIn } from '../slices/authSlice.js';
 import routes from '../routes.js';

@@ -10,6 +10,9 @@ export default {
           authFailed: 'the username or password is incorrect',
         },
       },
+      chat: {
+        channels: 'Каналы',
+      },
     },
   },
 };
