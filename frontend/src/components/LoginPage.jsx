@@ -3,15 +3,16 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
+import { useDispatch } from 'react-redux';
 
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import { useTranslation } from 'react-i18next';
-import useAuth from '../hooks/index.jsx';
+import { logIn } from '../slices/authSlice.js';
 import routes from '../routes.js';
 
 const LoginPage = () => {
-  const auth = useAuth();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [authFailed, setAuthFailed] = useState(false);
   const inputRef = useRef();
@@ -33,7 +34,7 @@ const LoginPage = () => {
       try {
         const res = await axios.post(routes.loginPath(), values);
         localStorage.setItem('userId', JSON.stringify(res.data));
-        auth.logIn();
+        dispatch(logIn());
         navigate('/');
       } catch (err) {
         formik.setSubmitting(false);

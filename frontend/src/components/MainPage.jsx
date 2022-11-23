@@ -1,15 +1,17 @@
 import { Button } from 'react-bootstrap';
-import useAuth from '../hooks/index.jsx';
+import { useDispatch, useSelector } from 'react-redux';
+import { logOut } from '../slices/authSlice.js';
 
 import logo from '../logo.svg';
 import '../App.css';
 
 const LogoutButton = () => {
-  const auth = useAuth();
+  const dispatch = useDispatch();
+  const loggedIn = useSelector((state) => state.auth.loggedIn);
 
   return (
-    auth.loggedIn
-      ? <Button onClick={auth.logOut}>Log out</Button>
+    loggedIn
+      ? <Button onClick={() => dispatch(logOut())}>Log out</Button>
       : null
   );
 };
