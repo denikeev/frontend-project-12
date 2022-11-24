@@ -6,6 +6,9 @@ const messagesAdapter = createEntityAdapter();
 const messagesSlice = createSlice({
   name: 'messages',
   initialState: messagesAdapter.getInitialState(),
+  reducers: {
+    addMessage: messagesAdapter.addOne,
+  },
   extraReducers: (builder) => {
     builder.addCase(fetchChannels.fulfilled, (state, { payload }) => {
       const { messages } = payload;
@@ -15,4 +18,5 @@ const messagesSlice = createSlice({
 });
 
 export default messagesSlice.reducer;
-export const selectors = messagesAdapter.getSelectors((state) => state.messages);
+export const { addMessage } = messagesSlice.actions;
+export const messagesSelector = messagesAdapter.getSelectors((state) => state.messages);

@@ -9,7 +9,7 @@ import {
 import '../i18n';
 import { useSelector } from 'react-redux';
 
-import MainPage from './MainPage.jsx';
+import ChatPage from './ChatPage.jsx';
 import LoginPage from './LoginPage.jsx';
 import NoMatchPage from './NoMatchPage.jsx';
 
@@ -32,7 +32,7 @@ const App = () => (
         path="/"
         element={(
           <PrivateRoute>
-            <MainPage />
+            <ChatPage />
           </PrivateRoute>
         )}
       />

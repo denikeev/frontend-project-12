@@ -8,6 +8,7 @@ import {
 import { useDispatch, useSelector } from 'react-redux';
 import ChannelsLayout from './ChannelsLayout.jsx';
 import MessageForm from './MessageForm.jsx';
+import MessagesBox from './MessagesBox.jsx';
 import { logOut } from '../slices/authSlice.js';
 import { fetchChannels } from '../slices/channelsSlice.js';
 
@@ -25,7 +26,7 @@ const LogoutButton = () => {
   );
 };
 
-const MainPage = () => {
+const ChatPage = () => {
   const dispatch = useDispatch();
   const { entities, currentChannelId } = useSelector((state) => state.channels);
   const currentChannel = entities[currentChannelId];
@@ -45,9 +46,9 @@ const MainPage = () => {
               <div className="bg-light mb-4 p-3 shadow-sm small">
                 {currentChannel?.name}
               </div>
-              <div id="messages-box" className="overflow-auto px-5 " />
+              <MessagesBox />
               <div className="mt-auto px-5 py-3">
-                <MessageForm />
+                <MessageForm currentChannelId={currentChannelId} />
               </div>
             </div>
           </Col>
@@ -57,4 +58,4 @@ const MainPage = () => {
   );
 };
 
-export default MainPage;
+export default ChatPage;
