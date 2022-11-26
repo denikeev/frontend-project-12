@@ -40,13 +40,13 @@ const ChatPage = () => {
       <LogoutButton />
       <Container className="h-100 my-4 overflow-hidden rounded shadow">
         <Row className="h-100 bg-white flex-md-row">
-          <ChannelsLayout />
+          <ChannelsLayout currentChannelId={currentChannelId} />
           <Col className="p-0 h-100">
             <div className="d-flex flex-column h-100">
               <div className="bg-light mb-4 p-3 shadow-sm small">
                 {currentChannel?.name}
               </div>
-              <MessagesBox />
+              <MessagesBox currentChannelId={currentChannelId} />
               <div className="mt-auto px-5 py-3">
                 <MessageForm currentChannelId={currentChannelId} />
               </div>
