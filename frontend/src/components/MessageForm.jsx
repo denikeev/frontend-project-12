@@ -5,15 +5,9 @@ import {
 } from 'react-bootstrap';
 
 import React, { useEffect, useRef } from 'react';
-import { useDispatch } from 'react-redux';
-import { io } from 'socket.io-client';
 import { useFormik } from 'formik';
-import { addMessage } from '../slices/messagesSlice';
 
-const socket = io();
-
-const MessageForm = ({ currentChannelId }) => {
-  const dispatch = useDispatch();
+const MessageForm = ({ currentChannelId, socket }) => {
   const inputRef = useRef();
 
   const formik = useFormik({
@@ -41,9 +35,6 @@ const MessageForm = ({ currentChannelId }) => {
 
   useEffect(() => {
     inputRef.current.focus();
-    socket.on('newMessage', (payload) => {
-      dispatch(addMessage(payload));
-    });
   }, []);
 
   return (
