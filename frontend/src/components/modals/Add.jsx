@@ -32,26 +32,23 @@ const Add = ({ onHide, socket }) => {
   });
 
   return (
-    <Modal show>
-      <Form onSubmit={formik.handleSubmit}>
-        <Modal.Header closeButton onClick={onHide}>
-          <Modal.Title>Добавить канал</Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <FormGroup className="form-group" controlId="formNameId">
+    <Modal show onHide={onHide}>
+      <Modal.Header closeButton>
+        <Modal.Title>Добавить канал</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        <Form onSubmit={formik.handleSubmit}>
+          <FormGroup className="form-group mb-3" controlId="formNameId">
             <FormControl name="name" data-testid="input-body" type="name" value={formik.values.name} onChange={formik.handleChange} onBlur={formik.handleBlur} ref={inputRef} isInvalid={formik.errors.name} />
             {formik.touched.name && formik.errors.name ? (
               <div className="invalid-feedback">{formik.errors.name}</div>
             ) : null}
             <Form.Control.Feedback type="invalid" />
           </FormGroup>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={onHide}>Отменить</Button>
+          <Button className="me-2" variant="secondary" onClick={onHide}>Отменить</Button>
           <Button onSubmit={formik.handleSubmit} variant="primary" type="submit">Отправить</Button>
-          {/* <input className="btn btn-primary" type="submit" value="submit" /> */}
-        </Modal.Footer>
-      </Form>
+        </Form>
+      </Modal.Body>
     </Modal>
   );
 };
