@@ -31,7 +31,7 @@ const ChannelsLayout = ({ currentChannelId, showModal }) => {
           channel.removable ? (
             <Nav.Item className="w-100" as="li" key={channel.id}>
               <Dropdown className="d-flex" as={ButtonGroup}>
-                <Button onClick={() => dispatch(setCurrentChannel(channel.id))} className="w-100 rounded-0 text-start" variant={getButtonVariant(channel.id)}>
+                <Button onClick={() => dispatch(setCurrentChannel(channel.id))} className="w-100 rounded-0 text-start text-truncate" variant={getButtonVariant(channel.id)}>
                   <span className="me-1">#</span>
                   {channel.name}
                 </Button>
@@ -40,7 +40,7 @@ const ChannelsLayout = ({ currentChannelId, showModal }) => {
                   <Dropdown.Item onClick={() => showModal('removing', channel)} as="button">
                     Удалить
                   </Dropdown.Item>
-                  <Dropdown.Item as="button">Переименовать</Dropdown.Item>
+                  <Dropdown.Item onClick={() => showModal('renaming', channel)} as="button">Переименовать</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </Nav.Item>

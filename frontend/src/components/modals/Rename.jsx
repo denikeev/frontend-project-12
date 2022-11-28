@@ -11,26 +11,25 @@ import * as yup from 'yup';
 import { useSelector } from 'react-redux';
 import { channelsSelector } from '../../slices/channelsSlice.js';
 
-const Add = ({ onHide, socket }) => {
+const Rename = ({ onHide, socket, channel }) => {
   const inputRef = useRef();
   const channels = useSelector(channelsSelector.selectAll);
   const channelNames = channels.map((el) => el.name);
   useEffect(() => {
-    inputRef.current.focus();
+    inputRef.current.select();
   }, []);
 
   const formik = useFormik({
-    initialValues: { name: '' },
+    initialValues: { name: channel.name },
     validationSchema: yup.object({
       name: yup.mixed().notOneOf(channelNames, 'Имя должно быть уникальным').required('обязательное поле'),
     }),
-
     onSubmit: ({ name }, actions) => {
       setTimeout(() => {
         actions.setSubmitting(false);
       }, 3000);
 
-      socket.emit('newChannel', { name }, (response) => {
+      socket.emit('renameChannel', { id: channel.id, name }, (response) => {
         if (response.status === 'ok') {
           onHide();
           actions.setSubmitting(false);
@@ -42,7 +41,7 @@ const Add = ({ onHide, socket }) => {
   return (
     <Modal show onHide={onHide}>
       <Modal.Header closeButton>
-        <Modal.Title>Добавить канал</Modal.Title>
+        <Modal.Title>Переименовать канал</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
@@ -61,4 +60,4 @@ const Add = ({ onHide, socket }) => {
   );
 };
 
-export default Add;
+export default Rename;

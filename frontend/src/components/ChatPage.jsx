@@ -16,11 +16,10 @@ import {
   addChannel,
   setCurrentChannel,
   deleteChannel,
+  renameChannel,
 } from '../slices/channelsSlice.js';
 import { addMessage } from '../slices/messagesSlice';
 import getModal from './modals/index.js';
-// import logo from '../logo.svg'; // delete
-// import '../App.css'; // delete
 
 const socket = io();
 
@@ -70,6 +69,9 @@ const ChatPage = () => {
     socket.on('removeChannel', (payload) => {
       dispatch(deleteChannel(payload.id));
     });
+    socket.on('renameChannel', (payload) => {
+      dispatch(renameChannel({ id: payload.id, changes: payload }));
+    });
   }, []);
 
   return (
@@ -97,7 +99,6 @@ const ChatPage = () => {
           </Row>
         </Container>
       </div>
-      {/*  */}
       {renderModal(modalInfo, hideModal)}
     </>
   );

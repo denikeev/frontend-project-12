@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import {
   Modal,
   Button,
@@ -5,10 +6,21 @@ import {
 } from 'react-bootstrap';
 
 const Remove = ({ onHide, socket, channel }) => {
+  const [isSubmitting, setSubmitting] = useState(false);
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    socket.emit('removeChannel', { id: channel.id });
-    onHide();
+    setSubmitting(true);
+    setTimeout(() => {
+      setSubmitting(false);
+    }, 3000);
+
+    socket.emit('removeChannel', { id: channel.id }, (response) => {
+      if (response.status === 'ok') {
+        onHide();
+        setSubmitting(false);
+      }
+    });
   };
 
   return (
@@ -19,8 +31,8 @@ const Remove = ({ onHide, socket, channel }) => {
       <Modal.Body>
         <p className="lead">Уверены?</p>
         <Form onSubmit={(e) => handleSubmit(e)}>
-          <Button className="me-2" variant="secondary" onClick={onHide}>Отменить</Button>
-          <Button variant="primary" type="submit">Удалить</Button>
+          <Button className="me-2" variant="secondary" onClick={onHide} disabled={isSubmitting}>Отменить</Button>
+          <Button variant="primary" type="submit" disabled={isSubmitting}>Удалить</Button>
         </Form>
       </Modal.Body>
     </Modal>
