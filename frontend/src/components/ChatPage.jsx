@@ -29,7 +29,14 @@ const renderModal = (modalInfo, hideModal) => {
     return null;
   }
   const Component = getModal(modalInfo.type);
-  return <Component modalInfo={modalInfo} onHide={hideModal} socket={socket} />;
+  return (
+    <Component
+      modalInfo={modalInfo}
+      onHide={hideModal}
+      socket={socket}
+      channel={modalInfo.channel}
+    />
+  );
 };
 
 const LogoutButton = () => {
@@ -44,9 +51,9 @@ const LogoutButton = () => {
 };
 
 const ChatPage = () => {
-  const [modalInfo, setModalInfo] = useState({ type: null });
-  const hideModal = () => setModalInfo({ type: null });
-  const showModal = (type) => setModalInfo({ type });
+  const [modalInfo, setModalInfo] = useState({ type: null, channel: null });
+  const hideModal = () => setModalInfo({ type: null, channel: null });
+  const showModal = (type, channel = null) => setModalInfo({ type, channel });
   const dispatch = useDispatch();
   const { entities, currentChannelId } = useSelector((state) => state.channels);
   const currentChannel = entities[currentChannelId];
