@@ -9,10 +9,9 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { setCurrentChannel, channelsSelector } from '../slices/channelsSlice.js';
 
-const ChannelsLayout = ({ currentChannelId, showModal }) => {
+const ChannelsLayout = ({ currentChannelId, showModal, socket }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'chat' });
   const channels = useSelector(channelsSelector.selectAll);
-  console.log('channels>>>', channels);
   const dispatch = useDispatch();
   const getButtonVariant = (id) => (currentChannelId === id ? 'secondary' : null);
 
@@ -38,7 +37,9 @@ const ChannelsLayout = ({ currentChannelId, showModal }) => {
                 </Button>
                 <Dropdown.Toggle split variant={getButtonVariant(channel.id)} />
                 <Dropdown.Menu>
-                  <Dropdown.Item as="button">Удалить</Dropdown.Item>
+                  <Dropdown.Item onClick={() => socket.emit('removeChannel', { id: channel.id })} as="button">
+                    Удалить
+                  </Dropdown.Item>
                   <Dropdown.Item as="button">Переименовать</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>

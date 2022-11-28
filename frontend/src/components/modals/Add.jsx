@@ -15,7 +15,6 @@ const Add = ({ onHide, socket }) => {
   const inputRef = useRef();
   const channels = useSelector(channelsSelector.selectAll);
   const channelNames = channels.map((el) => el.name);
-  console.log('channelNames>>>', channelNames);
   useEffect(() => {
     inputRef.current.focus();
   }, []);
@@ -26,7 +25,6 @@ const Add = ({ onHide, socket }) => {
       name: yup.mixed().notOneOf(channelNames, 'Имя должно быть уникальным').required('обязательное поле'),
     }),
     onSubmit: ({ name }) => {
-      console.log('channelName>>>', name);
       socket.emit('newChannel', { name });
       onHide();
       formik.setSubmitting(false);
