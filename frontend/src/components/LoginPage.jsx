@@ -57,7 +57,6 @@ const LoginPage = () => {
             value={formik.values.username}
             id="username"
             name="username"
-            type="text"
             placeholder={t('namePlaceholder')}
             autoComplete="username"
             isInvalid={authFailed}

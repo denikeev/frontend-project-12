@@ -11,6 +11,7 @@ import { useSelector } from 'react-redux';
 
 import ChatPage from './ChatPage.jsx';
 import LoginPage from './LoginPage.jsx';
+import SignUpPage from './SignUpPage.jsx';
 import NoMatchPage from './NoMatchPage.jsx';
 
 import '../index.css'; // check it
@@ -37,6 +38,7 @@ const App = () => (
         )}
       />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/signup" element={<SignUpPage />} />
       <Route path="*" element={<NoMatchPage />} />
     </Routes>
   </Router>
