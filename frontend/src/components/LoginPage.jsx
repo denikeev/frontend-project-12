@@ -5,7 +5,15 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useDispatch } from 'react-redux';
 
-import { Form, Button } from 'react-bootstrap';
+import {
+  Form,
+  Button,
+  Container,
+  Row,
+  Col,
+  Card,
+  FloatingLabel,
+} from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { logIn } from '../slices/authSlice.js';
 import routes from '../routes.js';
@@ -25,7 +33,7 @@ const LoginPage = () => {
     initialValues: { username: '', password: '' },
     validationSchema: yup.object({
       username: yup.string().required('Required'),
-      password: yup.string().required('Required').min(5, t('passwordMinText')),
+      password: yup.string().required('Required'),
     }),
     onSubmit: async (values) => {
       setAuthFailed(false);
@@ -49,46 +57,54 @@ const LoginPage = () => {
   });
 
   return (
-    <Form onSubmit={formik.handleSubmit}>
-      <fieldset disabled={formik.isSubmitting}>
-        <Form.Group className="mb-3">
-          <Form.Control
-            onChange={formik.handleChange}
-            value={formik.values.username}
-            id="username"
-            name="username"
-            placeholder={t('namePlaceholder')}
-            autoComplete="username"
-            isInvalid={authFailed}
-            required
-            ref={inputRef}
-          />
-          {formik.touched.username && formik.errors.username ? (
-            <div>{formik.errors.username}</div>
-          ) : null}
-        </Form.Group>
-        <Form.Group className="mb-3">
-          <Form.Control
-            onChange={formik.handleChange}
-            value={formik.values.password}
-            id="password"
-            name="password"
-            type="password"
-            placeholder={t('passwordPlaceholder')}
-            autoComplete="current-password"
-            isInvalid={authFailed}
-            required
-          />
-          {formik.touched.password && formik.errors.password ? (
-            <div>{formik.errors.password}</div>
-          ) : null}
-          <Form.Control.Feedback type="invalid">{t('authFailed')}</Form.Control.Feedback>
-        </Form.Group>
-        <Button variant="primary" type="submit">
-          {t('loginBtn')}
-        </Button>
-      </fieldset>
-    </Form>
+    <div className="d-flex flex-column h-100">
+      <Container fluid className="h-100">
+        <Row className="h-100 justify-content-center align-items-center">
+          <Col xs={12} md={8} xxl={6}>
+            <Card className="shadow-sm">
+              <Card.Body className="row p-5">
+                <Col xs={12} md={6} className="d-flex align-items-center justify-content-center">
+                  <img src="/images/tota-on-top.jpg" className="rounded-circle" alt="Регистрация" />
+                </Col>
+                <Form onSubmit={formik.handleSubmit} className="col-12 col-md-6 mt-3 mt-mb-0">
+                  <h1 className="text-center mb-4">Регистрация</h1>
+                  <FloatingLabel controlId="username" label="Имя пользователя" className="mb-3">
+                    <Form.Control
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.username}
+                      name="username"
+                      placeholder="Имя пользователя"
+                      autoComplete="username"
+                      required
+                      isInvalid={authFailed}
+                      ref={inputRef}
+                    />
+                  </FloatingLabel>
+                  <FloatingLabel controlId="password" label="Пароль" className="mb-4">
+                    <Form.Control
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.password}
+                      name="password"
+                      type="password"
+                      placeholder="Пароль"
+                      autoComplete="current-password"
+                      required
+                      isInvalid={authFailed}
+                    />
+                    <Form.Control.Feedback type="invalid" tooltip>Неверные имя пользователя или пароль</Form.Control.Feedback>
+                  </FloatingLabel>
+                  <Button variant="outline-primary" className="w-100" type="submit">
+                    {t('loginBtn')}
+                  </Button>
+                </Form>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
+    </div>
   );
 };
 
