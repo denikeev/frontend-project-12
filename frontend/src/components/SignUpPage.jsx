@@ -64,49 +64,51 @@ const SignUpPage = () => {
                 <img src="/images/tota.jpg" className="rounded-circle" alt="Регистрация" />
                 <Form onSubmit={formik.handleSubmit} className="w-50">
                   <h1 className="text-center mb-4">Регистрация</h1>
-                  <FloatingLabel controlId="username" label="Имя пользователя" className="mb-3">
-                    <Form.Control
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.username}
-                      name="username"
-                      placeholder="От 3 до 20 символов"
-                      autoComplete="username"
-                      isInvalid={!!formik.errors.username || signUpFailed}
-                      ref={inputRef}
-                    />
-                    <Form.Control.Feedback type="invalid" tooltip>{formik.errors.username}</Form.Control.Feedback>
-                  </FloatingLabel>
-                  <FloatingLabel controlId="password" label="Пароль" className="mb-3">
-                    <Form.Control
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.password}
-                      name="password"
-                      type="password"
-                      placeholder="Не менее 6 символов"
-                      autoComplete="new-password"
-                      aria-describedby="passwordHelpBlock"
-                      isInvalid={(formik.touched.password && !!formik.errors.password)
-                        || signUpFailed}
-                    />
-                    <Form.Control.Feedback type="invalid" tooltip>{formik.errors.password}</Form.Control.Feedback>
-                  </FloatingLabel>
-                  <FloatingLabel controlId="confirmPassword" label="Подтвердите пароль" className="mb-4">
-                    <Form.Control
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.confirmPassword}
-                      name="confirmPassword"
-                      type="password"
-                      placeholder="Пароли должны совпадать"
-                      autoComplete="new-password"
-                      isInvalid={(formik.touched.password && !!formik.errors.confirmPassword)
-                        || signUpFailed}
-                    />
-                    <Form.Control.Feedback type="invalid" tooltip>{formik.errors.confirmPassword || 'Такой пользователь существует'}</Form.Control.Feedback>
-                  </FloatingLabel>
-                  <Button variant="outline-primary" className="w-100" type="submit">Зарегистрироваться</Button>
+                  <fieldset disabled={formik.isSubmitting}>
+                    <FloatingLabel controlId="username" label="Имя пользователя" className="mb-3">
+                      <Form.Control
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.username}
+                        name="username"
+                        placeholder="От 3 до 20 символов"
+                        autoComplete="username"
+                        isInvalid={!!formik.errors.username || signUpFailed}
+                        ref={inputRef}
+                      />
+                      <Form.Control.Feedback type="invalid" tooltip>{formik.errors.username}</Form.Control.Feedback>
+                    </FloatingLabel>
+                    <FloatingLabel controlId="password" label="Пароль" className="mb-3">
+                      <Form.Control
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.password}
+                        name="password"
+                        type="password"
+                        placeholder="Не менее 6 символов"
+                        autoComplete="new-password"
+                        aria-describedby="passwordHelpBlock"
+                        isInvalid={(formik.touched.password && !!formik.errors.password)
+                          || signUpFailed}
+                      />
+                      <Form.Control.Feedback type="invalid" tooltip>{formik.errors.password}</Form.Control.Feedback>
+                    </FloatingLabel>
+                    <FloatingLabel controlId="confirmPassword" label="Подтвердите пароль" className="mb-4">
+                      <Form.Control
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.confirmPassword}
+                        name="confirmPassword"
+                        type="password"
+                        placeholder="Пароли должны совпадать"
+                        autoComplete="new-password"
+                        isInvalid={(formik.touched.password && !!formik.errors.confirmPassword)
+                          || signUpFailed}
+                      />
+                      <Form.Control.Feedback type="invalid" tooltip>{formik.errors.confirmPassword || 'Такой пользователь существует'}</Form.Control.Feedback>
+                    </FloatingLabel>
+                    <Button variant="outline-primary" className="w-100" type="submit">Зарегистрироваться</Button>
+                  </fieldset>
                 </Form>
               </Card.Body>
             </Card>

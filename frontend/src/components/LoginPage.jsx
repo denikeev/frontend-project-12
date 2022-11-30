@@ -67,37 +67,39 @@ const LoginPage = () => {
                   <img src="/images/tota-on-top.jpg" className="rounded-circle" alt="Регистрация" />
                 </Col>
                 <Form onSubmit={formik.handleSubmit} className="col-12 col-md-6 mt-3 mt-mb-0">
-                  <h1 className="text-center mb-4">Регистрация</h1>
-                  <FloatingLabel controlId="username" label="Имя пользователя" className="mb-3">
-                    <Form.Control
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.username}
-                      name="username"
-                      placeholder="Имя пользователя"
-                      autoComplete="username"
-                      required
-                      isInvalid={authFailed}
-                      ref={inputRef}
-                    />
-                  </FloatingLabel>
-                  <FloatingLabel controlId="password" label="Пароль" className="mb-4">
-                    <Form.Control
-                      onChange={formik.handleChange}
-                      onBlur={formik.handleBlur}
-                      value={formik.values.password}
-                      name="password"
-                      type="password"
-                      placeholder="Пароль"
-                      autoComplete="current-password"
-                      required
-                      isInvalid={authFailed}
-                    />
-                    <Form.Control.Feedback type="invalid" tooltip>Неверные имя пользователя или пароль</Form.Control.Feedback>
-                  </FloatingLabel>
-                  <Button variant="outline-primary" className="w-100" type="submit">
-                    {t('loginBtn')}
-                  </Button>
+                  <h1 className="text-center mb-4">Войти</h1>
+                  <fieldset disabled={formik.isSubmitting}>
+                    <FloatingLabel controlId="username" label="Имя пользователя" className="mb-3">
+                      <Form.Control
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.username}
+                        name="username"
+                        placeholder="Имя пользователя"
+                        autoComplete="username"
+                        required
+                        isInvalid={authFailed}
+                        ref={inputRef}
+                      />
+                    </FloatingLabel>
+                    <FloatingLabel controlId="password" label="Пароль" className="mb-4">
+                      <Form.Control
+                        onChange={formik.handleChange}
+                        onBlur={formik.handleBlur}
+                        value={formik.values.password}
+                        name="password"
+                        type="password"
+                        placeholder="Пароль"
+                        autoComplete="current-password"
+                        required
+                        isInvalid={authFailed}
+                      />
+                      <Form.Control.Feedback type="invalid" tooltip>Неверные имя пользователя или пароль</Form.Control.Feedback>
+                    </FloatingLabel>
+                    <Button variant="outline-primary" className="w-100" type="submit">
+                      {t('loginBtn')}
+                    </Button>
+                  </fieldset>
                 </Form>
               </Card.Body>
             </Card>
