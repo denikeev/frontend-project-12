@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useDispatch } from 'react-redux';
@@ -102,6 +102,13 @@ const LoginPage = () => {
                   </fieldset>
                 </Form>
               </Card.Body>
+              <Card.Footer className="p-4 text-center">
+                <span>
+                  Нет аккаунта?
+                  {' '}
+                </span>
+                <Link to="/signup">Регистрация</Link>
+              </Card.Footer>
             </Card>
           </Col>
         </Row>
