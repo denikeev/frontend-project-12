@@ -15,6 +15,7 @@ import {
   FloatingLabel,
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import Header from './Header.jsx';
 import { logIn } from '../slices/authSlice.js';
 import routes from '../routes.js';
 
@@ -58,6 +59,7 @@ const LoginPage = () => {
 
   return (
     <div className="d-flex flex-column h-100">
+      <Header />
       <Container fluid className="h-100">
         <Row className="h-100 justify-content-center align-items-center">
           <Col xs={12} md={8} xxl={6}>

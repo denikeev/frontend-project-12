@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
   Container,
   Row,
-  Button,
   Col,
 } from 'react-bootstrap';
 import { io } from 'socket.io-client';
@@ -10,7 +9,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import ChannelsLayout from './ChannelsLayout.jsx';
 import MessageForm from './MessageForm.jsx';
 import MessagesBox from './MessagesBox.jsx';
-import { logOut } from '../slices/authSlice.js';
 import {
   fetchChannels,
   addChannel,
@@ -20,6 +18,7 @@ import {
 } from '../slices/channelsSlice.js';
 import { addMessage } from '../slices/messagesSlice';
 import getModal from './modals/index.js';
+import Header from './Header.jsx';
 
 const socket = io();
 
@@ -35,17 +34,6 @@ const renderModal = (modalInfo, hideModal) => {
       socket={socket}
       channel={modalInfo.channel}
     />
-  );
-};
-
-const LogoutButton = () => {
-  const dispatch = useDispatch();
-  const loggedIn = useSelector((state) => state.auth.loggedIn);
-
-  return (
-    loggedIn
-      ? <Button onClick={() => dispatch(logOut())}>Log out</Button>
-      : null
   );
 };
 
@@ -77,7 +65,7 @@ const ChatPage = () => {
   return (
     <>
       <div className="d-flex flex-column h-100">
-        <LogoutButton />
+        <Header />
         <Container className="h-100 my-4 overflow-hidden rounded shadow">
           <Row className="h-100 bg-white flex-md-row">
             <ChannelsLayout
