@@ -6,9 +6,11 @@ import {
 
 import React, { useEffect, useRef } from 'react';
 import { useFormik } from 'formik';
+import { useTranslation } from 'react-i18next';
 
 const MessageForm = ({ currentChannelId, socket }) => {
   const inputRef = useRef();
+  const { t } = useTranslation('translation', { keyPrefix: 'chat.messageForm' });
 
   const formik = useFormik({
     initialValues: { text: '' },
@@ -46,8 +48,8 @@ const MessageForm = ({ currentChannelId, socket }) => {
           name="text"
           id="text"
           value={formik.values.text}
-          placeholder="Введите сообщение..." // добавить i18next
-          aria-label="Новое сообщение"
+          placeholder={t('messagePlaceholder')}
+          aria-label={t('ariaLabel')}
           ref={inputRef}
           disabled={formik.isSubmitting}
         />

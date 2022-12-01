@@ -22,7 +22,7 @@ import Header from './Header.jsx';
 
 const socket = io();
 
-const renderModal = (modalInfo, hideModal) => {
+const renderModal = (modalInfo, hideModal, socketInstance) => {
   if (!modalInfo.type) {
     return null;
   }
@@ -31,7 +31,7 @@ const renderModal = (modalInfo, hideModal) => {
     <Component
       modalInfo={modalInfo}
       onHide={hideModal}
-      socket={socket}
+      socket={socketInstance}
       channel={modalInfo.channel}
     />
   );
@@ -87,7 +87,7 @@ const ChatPage = () => {
           </Row>
         </Container>
       </div>
-      {renderModal(modalInfo, hideModal)}
+      {renderModal(modalInfo, hideModal, socket)}
     </>
   );
 };

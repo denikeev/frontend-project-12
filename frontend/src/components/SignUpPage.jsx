@@ -3,6 +3,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
 import {
   Container,
@@ -18,6 +19,8 @@ import routes from '../routes.js';
 import Header from './Header.jsx';
 
 const SignUpPage = () => {
+  const { t } = useTranslation('translation', { keyPrefix: 'signUpPage' });
+  const { t: tc } = useTranslation('translation', { keyPrefix: 'commonLoginSignUpForms' });
   const [signUpFailed, setSignUpFailed] = useState(false);
   const inputRef = useRef();
   const dispatch = useDispatch();
@@ -26,9 +29,9 @@ const SignUpPage = () => {
   const formik = useFormik({
     initialValues: { username: '', password: '', confirmPassword: '' },
     validationSchema: yup.object({
-      username: yup.string().required('Обязательное поле').min(3, 'От 3 до 20 символов').max(20, 'От 3 до 20 символов'),
-      password: yup.string().required('Обязательное поле').min(6, 'Не менее 6 символов'),
-      confirmPassword: yup.string().oneOf([yup.ref('password')], 'Пароли должны совпадать'),
+      username: yup.string().required(t('validation.required')).min(3, t('validation.usernameMinMax')).max(20, t('validation.usernameMinMax')),
+      password: yup.string().required(t('validation.required')).min(6, t('validation.passwordMin')),
+      confirmPassword: yup.string().oneOf([yup.ref('password')], t('validation.passwordsMatch')),
     }),
     onSubmit: async ({ username, password }) => {
       setSignUpFailed(false);
@@ -63,31 +66,31 @@ const SignUpPage = () => {
           <Col xs={12} md={8} xxl={6}>
             <Card className="shadow-sm">
               <Card.Body className="d-flex flex-column flex-md-row justify-content-around align-items-center p-5">
-                <img src="/images/tota.jpg" className="rounded-circle" alt="Регистрация" />
+                <img src="/images/tota.jpg" className="rounded-circle" alt={t('title')} />
                 <Form onSubmit={formik.handleSubmit} className="w-50">
-                  <h1 className="text-center mb-4">Регистрация</h1>
+                  <h1 className="text-center mb-4">{t('title')}</h1>
                   <fieldset disabled={formik.isSubmitting}>
-                    <FloatingLabel controlId="username" label="Имя пользователя" className="mb-3">
+                    <FloatingLabel controlId="username" label={tc('usernameLabel')} className="mb-3">
                       <Form.Control
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.username}
                         name="username"
-                        placeholder="От 3 до 20 символов"
+                        placeholder={tc('usernameLabel')}
                         autoComplete="username"
                         isInvalid={!!formik.errors.username || signUpFailed}
                         ref={inputRef}
                       />
                       <Form.Control.Feedback type="invalid" tooltip>{formik.errors.username}</Form.Control.Feedback>
                     </FloatingLabel>
-                    <FloatingLabel controlId="password" label="Пароль" className="mb-3">
+                    <FloatingLabel controlId="password" label={tc('passwordLabel')} className="mb-3">
                       <Form.Control
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.password}
                         name="password"
                         type="password"
-                        placeholder="Не менее 6 символов"
+                        placeholder={tc('passwordLabel')}
                         autoComplete="new-password"
                         aria-describedby="passwordHelpBlock"
                         isInvalid={(formik.touched.password && !!formik.errors.password)
@@ -95,21 +98,21 @@ const SignUpPage = () => {
                       />
                       <Form.Control.Feedback type="invalid" tooltip>{formik.errors.password}</Form.Control.Feedback>
                     </FloatingLabel>
-                    <FloatingLabel controlId="confirmPassword" label="Подтвердите пароль" className="mb-4">
+                    <FloatingLabel controlId="confirmPassword" label={t('confirmPassLabel')} className="mb-4">
                       <Form.Control
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.confirmPassword}
                         name="confirmPassword"
                         type="password"
-                        placeholder="Пароли должны совпадать"
+                        placeholder={t('confirmPassLabel')}
                         autoComplete="new-password"
                         isInvalid={(formik.touched.password && !!formik.errors.confirmPassword)
                           || signUpFailed}
                       />
-                      <Form.Control.Feedback type="invalid" tooltip>{formik.errors.confirmPassword || 'Такой пользователь существует'}</Form.Control.Feedback>
+                      <Form.Control.Feedback type="invalid" tooltip>{formik.errors.confirmPassword || t('userExist')}</Form.Control.Feedback>
                     </FloatingLabel>
-                    <Button variant="outline-primary" className="w-100" type="submit">Зарегистрироваться</Button>
+                    <Button variant="outline-primary" className="w-100" type="submit">{t('signUp')}</Button>
                   </fieldset>
                 </Form>
               </Card.Body>

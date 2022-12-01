@@ -9,12 +9,14 @@ import React, { useEffect, useRef } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 import { channelsSelector } from '../../slices/channelsSlice.js';
 
 const Add = ({ onHide, socket }) => {
   const inputRef = useRef();
   const channels = useSelector(channelsSelector.selectAll);
   const channelNames = channels.map((el) => el.name);
+  const { t } = useTranslation('translation');
   useEffect(() => {
     inputRef.current.focus();
   }, []);
@@ -22,7 +24,8 @@ const Add = ({ onHide, socket }) => {
   const formik = useFormik({
     initialValues: { name: '' },
     validationSchema: yup.object({
-      name: yup.mixed().notOneOf(channelNames, 'Имя должно быть уникальным').required('обязательное поле'),
+      name: yup.string().min(3, t('signUpPage.validation.usernameMinMax')).max(20, t('signUpPage.validation.usernameMinMax')).required(t('signUpPage.validation.required'))
+        .notOneOf(channelNames, t('modals.uniqName')),
     }),
 
     onSubmit: ({ name }, actions) => {
@@ -42,7 +45,7 @@ const Add = ({ onHide, socket }) => {
   return (
     <Modal show onHide={onHide}>
       <Modal.Header closeButton>
-        <Modal.Title>Добавить канал</Modal.Title>
+        <Modal.Title>{t('modals.addChannel')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
@@ -53,8 +56,8 @@ const Add = ({ onHide, socket }) => {
             ) : null}
             <Form.Control.Feedback type="invalid" />
           </FormGroup>
-          <Button className="me-2" variant="secondary" onClick={onHide}>Отменить</Button>
-          <Button onSubmit={formik.handleSubmit} variant="primary" type="submit">Отправить</Button>
+          <Button className="me-2" variant="secondary" onClick={onHide}>{t('modals.cancel')}</Button>
+          <Button onSubmit={formik.handleSubmit} variant="primary" type="submit">{t('modals.submit')}</Button>
         </Form>
       </Modal.Body>
     </Modal>

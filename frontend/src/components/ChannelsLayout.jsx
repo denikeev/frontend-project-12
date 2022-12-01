@@ -37,10 +37,8 @@ const ChannelsLayout = ({ currentChannelId, showModal }) => {
                 </Button>
                 <Dropdown.Toggle split variant={getButtonVariant(channel.id)} />
                 <Dropdown.Menu>
-                  <Dropdown.Item onClick={() => showModal('removing', channel)} as="button">
-                    Удалить
-                  </Dropdown.Item>
-                  <Dropdown.Item onClick={() => showModal('renaming', channel)} as="button">Переименовать</Dropdown.Item>
+                  <Dropdown.Item onClick={() => showModal('removing', channel)} as="button">{t('deleteChannel')}</Dropdown.Item>
+                  <Dropdown.Item onClick={() => showModal('renaming', channel)} as="button">{t('renameChannel')}</Dropdown.Item>
                 </Dropdown.Menu>
               </Dropdown>
             </Nav.Item>

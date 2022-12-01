@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Modal,
   Button,
@@ -7,6 +8,7 @@ import {
 
 const Remove = ({ onHide, socket, channel }) => {
   const [isSubmitting, setSubmitting] = useState(false);
+  const { t } = useTranslation('translation');
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -26,13 +28,13 @@ const Remove = ({ onHide, socket, channel }) => {
   return (
     <Modal show onHide={onHide}>
       <Modal.Header closeButton>
-        <Modal.Title>Удалить канал</Modal.Title>
+        <Modal.Title>{t('modals.deleteChannel')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p className="lead">Уверены?</p>
+        <p className="lead">{t('modals.confirm')}</p>
         <Form onSubmit={(e) => handleSubmit(e)}>
-          <Button className="me-2" variant="secondary" onClick={onHide} disabled={isSubmitting}>Отменить</Button>
-          <Button variant="primary" type="submit" disabled={isSubmitting}>Удалить</Button>
+          <Button className="me-2" variant="secondary" onClick={onHide} disabled={isSubmitting}>{t('modals.cancel')}</Button>
+          <Button variant="primary" type="submit" disabled={isSubmitting}>{t('modals.delete')}</Button>
         </Form>
       </Modal.Body>
     </Modal>
