@@ -35,9 +35,12 @@ const SignUpPage = () => {
     }),
     onSubmit: async ({ username, password }) => {
       setSignUpFailed(false);
+      console.log('usernameSend>>>', username);
+      console.log('passwordSend>>>', password);
 
       try {
-        const res = await axios.post(routes.signUpPath({ username, password }));
+        const res = await axios.post(routes.signUpPath(), { username, password });
+        console.log('signUpRes>>>', res);
         localStorage.setItem('userId', JSON.stringify(res.data));
         localStorage.setItem('username', res.data.username);
         dispatch(logIn());
@@ -45,6 +48,7 @@ const SignUpPage = () => {
       } catch (err) {
         formik.setSubmitting(false);
         if (err.response && err.response.status === 409) {
+          console.log('errSend>>>', err.response);
           setSignUpFailed(true);
           inputRef.current.select();
           return;

@@ -16,6 +16,7 @@ const MessageForm = ({ currentChannelId, socket }) => {
     initialValues: { text: '' },
     onSubmit: (values, actions) => {
       const username = localStorage.getItem('username');
+      console.log('username>>>', username);
       const message = {
         body: values.text,
         username,

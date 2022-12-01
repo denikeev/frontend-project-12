@@ -12,7 +12,7 @@ const MessagesBox = ({ currentChannelId }) => {
   });
 
   return (
-    <div id="messages-box" className="overflow-auto px-5">
+    <div className="overflow-auto px-5">
       {messages.map((message) => (
         <div className="text-break mb-2" key={message.id}>
           <b>{message.username}</b>
