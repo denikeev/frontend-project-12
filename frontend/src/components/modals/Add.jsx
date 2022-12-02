@@ -11,6 +11,7 @@ import * as yup from 'yup';
 import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { setCurrentChannel, channelsSelector } from '../../slices/channelsSlice.js';
+import notify from '../../notify.js';
 
 const Add = ({ onHide, socket }) => {
   const inputRef = useRef();
@@ -34,11 +35,12 @@ const Add = ({ onHide, socket }) => {
         actions.setSubmitting(false);
       }, 3000);
 
-      socket.emit('newChannel', { name }, (response) => {
+      socket.volatile.emit('newChannel', { name }, (response) => {
         if (response.status === 'ok') {
           dispatch(setCurrentChannel(response.data.id));
           onHide();
           actions.setSubmitting(false);
+          notify('success', t('notifications.addChannel'));
         }
       });
     },

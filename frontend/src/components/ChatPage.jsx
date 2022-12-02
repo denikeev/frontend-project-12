@@ -5,7 +5,10 @@ import {
   Col,
 } from 'react-bootstrap';
 import { io } from 'socket.io-client';
+import { ToastContainer } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+import notify from '../notify.js';
 import ChannelsLayout from './ChannelsLayout.jsx';
 import MessageForm from './MessageForm.jsx';
 import MessagesBox from './MessagesBox.jsx';
@@ -41,6 +44,8 @@ const ChatPage = () => {
   const hideModal = () => setModalInfo({ type: null, channel: null });
   const showModal = (type, channel = null) => setModalInfo({ type, channel });
   const dispatch = useDispatch();
+  const { t } = useTranslation('translation');
+
   const { entities, currentChannelId } = useSelector((state) => state.channels);
   const currentChannel = entities[currentChannelId];
 
@@ -58,6 +63,14 @@ const ChatPage = () => {
     socket.on('renameChannel', (payload) => {
       dispatch(renameChannel({ id: payload.id, changes: payload }));
     });
+    socket.on('disconnect', (reason) => {
+      if (reason === 'transport error') {
+        notify('warn', t('notifications.networkWarn'), { autoClose: 7000 });
+      }
+    });
+    // socket.on('connect_error', (err) => {
+    //   console.dir(err);
+    // });
   }, []);
 
   return (
@@ -86,6 +99,7 @@ const ChatPage = () => {
         </Container>
       </div>
       {renderModal(modalInfo, hideModal, socket)}
+      <ToastContainer />
     </>
   );
 };

@@ -16,6 +16,7 @@ import NoMatchPage from './NoMatchPage.jsx';
 
 import '../index.css'; // check it
 import 'bootstrap/dist/css/bootstrap.min.css';
+import 'react-toastify/dist/ReactToastify.min.css';
 
 const PrivateRoute = ({ children }) => {
   const location = useLocation();

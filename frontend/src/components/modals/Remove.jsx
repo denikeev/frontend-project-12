@@ -6,6 +6,8 @@ import {
   Form,
 } from 'react-bootstrap';
 
+import notify from '../../notify.js';
+
 const Remove = ({ onHide, socket, channel }) => {
   const [isSubmitting, setSubmitting] = useState(false);
   const { t } = useTranslation('translation');
@@ -17,10 +19,11 @@ const Remove = ({ onHide, socket, channel }) => {
       setSubmitting(false);
     }, 3000);
 
-    socket.emit('removeChannel', { id: channel.id }, (response) => {
+    socket.volatile.emit('removeChannel', { id: channel.id }, (response) => {
       if (response.status === 'ok') {
         onHide();
         setSubmitting(false);
+        notify('success', t('notifications.deleteChannel'));
       }
     });
   };

@@ -16,7 +16,6 @@ const MessageForm = ({ currentChannelId, socket }) => {
     initialValues: { text: '' },
     onSubmit: (values, actions) => {
       const username = localStorage.getItem('username');
-      console.log('username>>>', username);
       const message = {
         body: values.text,
         username,
@@ -27,7 +26,7 @@ const MessageForm = ({ currentChannelId, socket }) => {
         actions.setSubmitting(false);
       }, 3000);
 
-      socket.emit('newMessage', message, (response) => {
+      socket.volatile.emit('newMessage', message, (response) => {
         if (response.status === 'ok') {
           actions.setSubmitting(false);
           actions.resetForm();

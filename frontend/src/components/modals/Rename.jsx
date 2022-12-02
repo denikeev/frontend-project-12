@@ -11,9 +11,9 @@ import * as yup from 'yup';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { channelsSelector } from '../../slices/channelsSlice.js';
+import notify from '../../notify.js';
 
 const Rename = ({ onHide, socket, channel }) => {
-  console.log('channel>>>', channel);
   const inputRef = useRef();
   const channels = useSelector(channelsSelector.selectAll);
   const { t } = useTranslation('translation');
@@ -33,10 +33,11 @@ const Rename = ({ onHide, socket, channel }) => {
         actions.setSubmitting(false);
       }, 3000);
 
-      socket.emit('renameChannel', { id: channel.id, name }, (response) => {
+      socket.volatile.emit('renameChannel', { id: channel.id, name }, (response) => {
         if (response.status === 'ok') {
           onHide();
           actions.setSubmitting(false);
+          notify('success', t('notifications.renameChannel'));
         }
       });
     },

@@ -52,6 +52,12 @@ export default {
         delete: 'Удалить',
         renameChannel: 'Переименовать канал',
       },
+      notifications: {
+        networkWarn: 'Проблемы с сетью, проверьте подключение к интернету',
+        addChannel: 'Канал добавлен',
+        deleteChannel: 'Канал удалён',
+        renameChannel: 'Канал переименован',
+      },
     },
   },
 };
