@@ -12,7 +12,6 @@ import MessagesBox from './MessagesBox.jsx';
 import {
   fetchChannels,
   addChannel,
-  setCurrentChannel,
   deleteChannel,
   renameChannel,
 } from '../slices/channelsSlice.js';
@@ -52,7 +51,6 @@ const ChatPage = () => {
     });
     socket.on('newChannel', (payload) => {
       dispatch(addChannel(payload));
-      dispatch(setCurrentChannel(payload.id));
     });
     socket.on('removeChannel', (payload) => {
       dispatch(deleteChannel(payload.id));

@@ -8,14 +8,15 @@ import {
 import React, { useEffect, useRef } from 'react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { channelsSelector } from '../../slices/channelsSlice.js';
+import { setCurrentChannel, channelsSelector } from '../../slices/channelsSlice.js';
 
 const Add = ({ onHide, socket }) => {
   const inputRef = useRef();
   const channels = useSelector(channelsSelector.selectAll);
   const channelNames = channels.map((el) => el.name);
+  const dispatch = useDispatch();
   const { t } = useTranslation('translation');
   useEffect(() => {
     inputRef.current.focus();
@@ -35,6 +36,7 @@ const Add = ({ onHide, socket }) => {
 
       socket.emit('newChannel', { name }, (response) => {
         if (response.status === 'ok') {
+          dispatch(setCurrentChannel(response.data.id));
           onHide();
           actions.setSubmitting(false);
         }
