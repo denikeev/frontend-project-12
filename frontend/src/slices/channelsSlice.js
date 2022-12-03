@@ -32,7 +32,7 @@ const channelsSlice = createSlice({
   initialState: channelsAdapter.getInitialState({ defaultChannelId: null, currentChannelId: null }),
   reducers: {
     setCurrentChannel: (state, { payload }) => {
-      state.currentChannnotifyelId = payload;
+      state.currentChannelId = payload;
     },
     addChannel: (state, { payload }) => {
       channelsAdapter.addOne(state, payload);
