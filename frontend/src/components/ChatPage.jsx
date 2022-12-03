@@ -8,6 +8,7 @@ import { io } from 'socket.io-client';
 import { ToastContainer } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import filter from 'leo-profanity';
 import notify from '../notify.js';
 import ChannelsLayout from './ChannelsLayout.jsx';
 import MessageForm from './MessageForm.jsx';
@@ -45,6 +46,7 @@ const ChatPage = () => {
   const showModal = (type, channel = null) => setModalInfo({ type, channel });
   const dispatch = useDispatch();
   const { t } = useTranslation('translation');
+  filter.loadDictionary('ru');
 
   const { entities, currentChannelId } = useSelector((state) => state.channels);
   const currentChannel = entities[currentChannelId];
@@ -52,7 +54,8 @@ const ChatPage = () => {
   useEffect(() => {
     dispatch(fetchChannels());
     socket.on('newMessage', (payload) => {
-      dispatch(addMessage(payload));
+      const filteredText = filter.clean(payload.body);
+      dispatch(addMessage({ ...payload, body: filteredText }));
     });
     socket.on('newChannel', (payload) => {
       dispatch(addChannel(payload));
