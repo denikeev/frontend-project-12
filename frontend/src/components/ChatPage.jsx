@@ -52,29 +52,34 @@ const ChatPage = () => {
   const currentChannel = entities[currentChannelId];
 
   useEffect(() => {
-    dispatch(fetchChannels());
-    socket.on('newMessage', (payload) => {
-      const filteredText = filter.clean(payload.body);
-      dispatch(addMessage({ ...payload, body: filteredText }));
-    });
-    socket.on('newChannel', (payload) => {
-      dispatch(addChannel(payload));
-    });
-    socket.on('removeChannel', (payload) => {
-      dispatch(deleteChannel(payload.id));
-    });
-    socket.on('renameChannel', (payload) => {
-      dispatch(renameChannel({ id: payload.id, changes: payload }));
-    });
-    socket.on('disconnect', (reason) => {
-      if (reason === 'transport error') {
-        notify('warn', t('notifications.networkWarn'), { autoClose: 7000 });
-      }
-    });
-    // socket.on('connect_error', (err) => {
-    //   console.dir(err);
-    // });
-  }, []);
+    const init = () => {
+      dispatch(fetchChannels());
+      socket.on('newMessage', (payload) => {
+        console.log('newMessage>>>', payload);
+        const filteredText = filter.clean(payload.body);
+        dispatch(addMessage({ ...payload, body: filteredText }));
+      });
+      socket.on('newChannel', (payload) => {
+        dispatch(addChannel(payload));
+      });
+      socket.on('removeChannel', (payload) => {
+        dispatch(deleteChannel(payload.id));
+      });
+      socket.on('renameChannel', (payload) => {
+        dispatch(renameChannel({ id: payload.id, changes: payload }));
+      });
+      socket.on('disconnect', (reason) => {
+        if (reason === 'transport error') {
+          notify('warn', t('notifications.networkWarn'), { autoClose: 7000 });
+        }
+      });
+      // socket.on('connect_error', (err) => {
+      //   console.dir(err);
+      // });
+    };
+
+    init();
+  }, [dispatch, t]);
 
   return (
     <>
