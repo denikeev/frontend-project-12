@@ -8,6 +8,8 @@ import {
 } from 'react-router-dom';
 import '../i18n';
 import { useSelector } from 'react-redux';
+import { Provider } from '@rollbar/react';
+import { ToastContainer } from 'react-toastify';
 
 import ChatPage from './ChatPage.jsx';
 import LoginPage from './LoginPage.jsx';
@@ -17,6 +19,13 @@ import NoMatchPage from './NoMatchPage.jsx';
 import '../index.css'; // check it
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.min.css';
+
+const rollbarConfig = {
+  accessToken: process.env.REACT_APP_ROLLBAR_ACCESS_TOKEN,
+  environment: 'production',
+  captureUncaught: true,
+  captureUnhandledRejections: true,
+};
 
 const PrivateRoute = ({ children }) => {
   const location = useLocation();
@@ -28,21 +37,24 @@ const PrivateRoute = ({ children }) => {
 };
 
 const App = () => (
-  <Router>
-    <Routes>
-      <Route
-        path="/"
-        element={(
-          <PrivateRoute>
-            <ChatPage />
-          </PrivateRoute>
-        )}
-      />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/signup" element={<SignUpPage />} />
-      <Route path="*" element={<NoMatchPage />} />
-    </Routes>
-  </Router>
+  <Provider config={rollbarConfig}>
+    <Router>
+      <Routes>
+        <Route
+          path="/"
+          element={(
+            <PrivateRoute>
+              <ChatPage />
+            </PrivateRoute>
+          )}
+        />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="*" element={<NoMatchPage />} />
+      </Routes>
+    </Router>
+    <ToastContainer />
+  </Provider>
 );
 
 export default App;

@@ -5,7 +5,6 @@ import {
   Col,
 } from 'react-bootstrap';
 import { io } from 'socket.io-client';
-import { ToastContainer } from 'react-toastify';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import filter from 'leo-profanity';
@@ -55,7 +54,6 @@ const ChatPage = () => {
     const init = () => {
       dispatch(fetchChannels());
       socket.on('newMessage', (payload) => {
-        console.log('newMessage>>>', payload);
         const filteredText = filter.clean(payload.body);
         dispatch(addMessage({ ...payload, body: filteredText }));
       });
@@ -69,13 +67,10 @@ const ChatPage = () => {
         dispatch(renameChannel({ id: payload.id, changes: payload }));
       });
       socket.on('disconnect', (reason) => {
-        if (reason === 'transport error') {
+        if (reason === 'transport error' || reason === 'transport close') {
           notify('warn', t('notifications.networkWarn'), { autoClose: 7000 });
         }
       });
-      // socket.on('connect_error', (err) => {
-      //   console.dir(err);
-      // });
     };
 
     init();
@@ -107,7 +102,6 @@ const ChatPage = () => {
         </Container>
       </div>
       {renderModal(modalInfo, hideModal, socket)}
-      <ToastContainer />
     </>
   );
 };

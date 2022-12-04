@@ -4,6 +4,8 @@ import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import { useRollbar } from '@rollbar/react';
+
 import * as yup from 'yup';
 import {
   Container,
@@ -14,33 +16,32 @@ import {
   Button,
   FloatingLabel,
 } from 'react-bootstrap';
+import notify from '../notify.js';
 import { logIn } from '../slices/authSlice.js';
 import routes from '../routes.js';
 import Header from './Header.jsx';
 
 const SignUpPage = () => {
-  const { t } = useTranslation('translation', { keyPrefix: 'signUpPage' });
+  const { t } = useTranslation('translation');
   const { t: tc } = useTranslation('translation', { keyPrefix: 'commonLoginSignUpForms' });
   const [signUpFailed, setSignUpFailed] = useState(false);
   const inputRef = useRef();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const rollbar = useRollbar();
 
   const formik = useFormik({
     initialValues: { username: '', password: '', confirmPassword: '' },
     validationSchema: yup.object({
-      username: yup.string().required(t('validation.required')).min(3, t('validation.usernameMinMax')).max(20, t('validation.usernameMinMax')),
-      password: yup.string().required(t('validation.required')).min(6, t('validation.passwordMin')),
-      confirmPassword: yup.string().oneOf([yup.ref('password')], t('validation.passwordsMatch')),
+      username: yup.string().required(t('signUpPage.validation.required')).min(3, t('signUpPage.validation.usernameMinMax')).max(20, t('validation.usernameMinMax')),
+      password: yup.string().required(t('signUpPage.validation.required')).min(6, t('signUpPage.validation.passwordMin')),
+      confirmPassword: yup.string().oneOf([yup.ref('password')], t('signUpPage.validation.passwordsMatch')),
     }),
     onSubmit: async ({ username, password }) => {
       setSignUpFailed(false);
-      console.log('usernameSend>>>', username);
-      console.log('passwordSend>>>', password);
 
       try {
         const res = await axios.post(routes.signUpPath(), { username, password });
-        console.log('signUpRes>>>', res);
         localStorage.setItem('userId', JSON.stringify(res.data));
         localStorage.setItem('username', res.data.username);
         dispatch(logIn());
@@ -48,11 +49,15 @@ const SignUpPage = () => {
       } catch (err) {
         formik.setSubmitting(false);
         if (err.response && err.response.status === 409) {
-          console.log('errSend>>>', err.response);
           setSignUpFailed(true);
           inputRef.current.select();
           return;
         }
+        if (err.code === 'ERR_NETWORK') {
+          notify('warn', t('notifications.networkWarn'), { autoClose: 7000 });
+          return;
+        }
+        rollbar.error('unknown signup error', err);
         throw err;
       }
     },
@@ -70,9 +75,9 @@ const SignUpPage = () => {
           <Col xs={12} md={8} xxl={6}>
             <Card className="shadow-sm">
               <Card.Body className="d-flex flex-column flex-md-row justify-content-around align-items-center p-5">
-                <img src="/images/tota.jpg" className="rounded-circle" alt={t('title')} />
+                <img src="/images/tota.jpg" className="rounded-circle" alt={t('signUpPage.title')} />
                 <Form onSubmit={formik.handleSubmit} className="w-50">
-                  <h1 className="text-center mb-4">{t('title')}</h1>
+                  <h1 className="text-center mb-4">{t('signUpPage.title')}</h1>
                   <fieldset disabled={formik.isSubmitting}>
                     <FloatingLabel controlId="username" label={tc('usernameLabel')} className="mb-3">
                       <Form.Control
@@ -102,21 +107,21 @@ const SignUpPage = () => {
                       />
                       <Form.Control.Feedback type="invalid" tooltip>{formik.errors.password}</Form.Control.Feedback>
                     </FloatingLabel>
-                    <FloatingLabel controlId="confirmPassword" label={t('confirmPassLabel')} className="mb-4">
+                    <FloatingLabel controlId="confirmPassword" label={t('signUpPage.confirmPassLabel')} className="mb-4">
                       <Form.Control
                         onChange={formik.handleChange}
                         onBlur={formik.handleBlur}
                         value={formik.values.confirmPassword}
                         name="confirmPassword"
                         type="password"
-                        placeholder={t('confirmPassLabel')}
+                        placeholder={t('signUpPage.confirmPassLabel')}
                         autoComplete="new-password"
                         isInvalid={(formik.touched.password && !!formik.errors.confirmPassword)
                           || signUpFailed}
                       />
-                      <Form.Control.Feedback type="invalid" tooltip>{formik.errors.confirmPassword || t('userExist')}</Form.Control.Feedback>
+                      <Form.Control.Feedback type="invalid" tooltip>{formik.errors.confirmPassword || t('signUpPage.userExist')}</Form.Control.Feedback>
                     </FloatingLabel>
-                    <Button variant="outline-primary" className="w-100" type="submit">{t('signUp')}</Button>
+                    <Button variant="outline-primary" className="w-100" type="submit">{t('signUpPage.signUp')}</Button>
                   </fieldset>
                 </Form>
               </Card.Body>

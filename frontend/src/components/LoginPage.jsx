@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { useRollbar } from '@rollbar/react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useFormik } from 'formik';
@@ -15,12 +16,14 @@ import {
   FloatingLabel,
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import notify from '../notify.js';
 import Header from './Header.jsx';
 import { logIn } from '../slices/authSlice.js';
 import routes from '../routes.js';
 
 const LoginPage = () => {
   const dispatch = useDispatch();
+  const rollbar = useRollbar();
   const navigate = useNavigate();
   const [authFailed, setAuthFailed] = useState(false);
   const inputRef = useRef();
@@ -52,6 +55,11 @@ const LoginPage = () => {
           inputRef.current.select();
           return;
         }
+        if (err.code === 'ERR_NETWORK') {
+          notify('warn', t('notifications.networkWarn'), { autoClose: 7000 });
+          return;
+        }
+        rollbar.error('unknown auth error', err);
         throw err;
       }
     },
