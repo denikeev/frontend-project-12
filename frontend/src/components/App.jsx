@@ -11,12 +11,13 @@ import { useSelector } from 'react-redux';
 import { Provider } from '@rollbar/react';
 import { ToastContainer } from 'react-toastify';
 
+import Header from './Header.jsx';
 import ChatPage from './ChatPage.jsx';
 import LoginPage from './LoginPage.jsx';
 import SignUpPage from './SignUpPage.jsx';
 import NoMatchPage from './NoMatchPage.jsx';
 
-import '../index.css'; // check it
+import '../index.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'react-toastify/dist/ReactToastify.min.css';
 
@@ -39,19 +40,22 @@ const PrivateRoute = ({ children }) => {
 const App = () => (
   <Provider config={rollbarConfig}>
     <Router>
-      <Routes>
-        <Route
-          path="/"
-          element={(
-            <PrivateRoute>
-              <ChatPage />
-            </PrivateRoute>
-          )}
-        />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/signup" element={<SignUpPage />} />
-        <Route path="*" element={<NoMatchPage />} />
-      </Routes>
+      <div className="d-flex flex-column h-100">
+        <Header />
+        <Routes>
+          <Route
+            path="/"
+            element={(
+              <PrivateRoute>
+                <ChatPage />
+              </PrivateRoute>
+            )}
+          />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/signup" element={<SignUpPage />} />
+          <Route path="*" element={<NoMatchPage />} />
+        </Routes>
+      </div>
     </Router>
     <ToastContainer />
   </Provider>

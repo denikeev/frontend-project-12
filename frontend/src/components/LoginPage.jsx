@@ -17,7 +17,6 @@ import {
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import notify from '../notify.js';
-import Header from './Header.jsx';
 import { logIn } from '../slices/authSlice.js';
 import routes from '../routes.js';
 
@@ -66,64 +65,61 @@ const LoginPage = () => {
   });
 
   return (
-    <div className="d-flex flex-column h-100">
-      <Header />
-      <Container fluid className="h-100">
-        <Row className="h-100 justify-content-center align-items-center">
-          <Col xs={12} md={8} xxl={6}>
-            <Card className="shadow-sm">
-              <Card.Body className="row p-5">
-                <Col xs={12} md={6} className="d-flex align-items-center justify-content-center">
-                  <img src="/images/tota-on-top.jpg" className="rounded-circle" alt={t('loginPage.title')} />
-                </Col>
-                <Form onSubmit={formik.handleSubmit} className="col-12 col-md-6 mt-3 mt-mb-0">
-                  <h1 className="text-center mb-4">{t('loginPage.title')}</h1>
-                  <fieldset disabled={formik.isSubmitting}>
-                    <FloatingLabel controlId="username" label={t('commonLoginSignUpForms.usernameLabel')} className="mb-3">
-                      <Form.Control
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.username}
-                        name="username"
-                        placeholder={t('commonLoginSignUpForms.usernameLabel')}
-                        autoComplete="username"
-                        required
-                        isInvalid={authFailed}
-                        ref={inputRef}
-                      />
-                    </FloatingLabel>
-                    <FloatingLabel controlId="password" label={t('commonLoginSignUpForms.passwordLabel')} className="mb-4">
-                      <Form.Control
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                        value={formik.values.password}
-                        name="password"
-                        type="password"
-                        placeholder={t('commonLoginSignUpForms.passwordLabel')}
-                        autoComplete="current-password"
-                        required
-                        isInvalid={authFailed}
-                      />
-                      <Form.Control.Feedback type="invalid" tooltip>{t('loginPage.invalidAuth')}</Form.Control.Feedback>
-                    </FloatingLabel>
-                    <Button variant="outline-primary" className="w-100" type="submit">
-                      {t('loginPage.loginBtn')}
-                    </Button>
-                  </fieldset>
-                </Form>
-              </Card.Body>
-              <Card.Footer className="p-4 text-center">
-                <span>
-                  {t('loginPage.noAccount')}
-                  {' '}
-                </span>
-                <Link to="/signup">{t('signUpPage.title')}</Link>
-              </Card.Footer>
-            </Card>
-          </Col>
-        </Row>
-      </Container>
-    </div>
+    <Container fluid className="h-100">
+      <Row className="h-100 justify-content-center align-items-center">
+        <Col xs={12} md={8} xxl={6}>
+          <Card className="shadow-sm">
+            <Card.Body className="row justify-content-center p-5">
+              <Col xs={12} md={6} className="d-flex">
+                <img src="/images/tota-on-top.jpg" className="m-auto rounded-circle" alt={t('loginPage.title')} />
+              </Col>
+              <Form onSubmit={formik.handleSubmit} className="col-12 col-sm-6 mt-3 mt-mb-0">
+                <h1 className="text-center mb-4">{t('loginPage.title')}</h1>
+                <fieldset disabled={formik.isSubmitting}>
+                  <FloatingLabel controlId="username" label={t('loginPage.usernameLabel')} className="mb-3">
+                    <Form.Control
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.username}
+                      name="username"
+                      placeholder={t('loginPage.usernameLabel')}
+                      autoComplete="username"
+                      required
+                      isInvalid={authFailed}
+                      ref={inputRef}
+                    />
+                  </FloatingLabel>
+                  <FloatingLabel controlId="password" label={t('loginPage.passwordLabel')} className="mb-4">
+                    <Form.Control
+                      onChange={formik.handleChange}
+                      onBlur={formik.handleBlur}
+                      value={formik.values.password}
+                      name="password"
+                      type="password"
+                      placeholder={t('loginPage.passwordLabel')}
+                      autoComplete="current-password"
+                      required
+                      isInvalid={authFailed}
+                    />
+                    <Form.Control.Feedback type="invalid" tooltip>{t('loginPage.invalidAuth')}</Form.Control.Feedback>
+                  </FloatingLabel>
+                  <Button variant="outline-primary" className="w-100" type="submit">
+                    {t('loginPage.loginBtn')}
+                  </Button>
+                </fieldset>
+              </Form>
+            </Card.Body>
+            <Card.Footer className="p-4 text-center">
+              <span>
+                {t('loginPage.noAccount')}
+                {' '}
+              </span>
+              <Link to="/signup">{t('signUpPage.title')}</Link>
+            </Card.Footer>
+          </Card>
+        </Col>
+      </Row>
+    </Container>
   );
 };
 

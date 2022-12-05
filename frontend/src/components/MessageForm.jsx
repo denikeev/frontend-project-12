@@ -52,6 +52,7 @@ const MessageForm = ({ currentChannelId, socket }) => {
           aria-label={t('ariaLabel')}
           ref={inputRef}
           disabled={formik.isSubmitting}
+          autoComplete="off"
         />
         <Button className="btn-group-vertical border-0" variant={null} type="submit" disabled={!formik.values.text}>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="20" height="20" fill="#212529">

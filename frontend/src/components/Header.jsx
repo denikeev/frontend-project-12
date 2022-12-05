@@ -1,6 +1,7 @@
 import { Navbar, Container, Button } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
 import { logOut } from '../slices/authSlice.js';
 
 const LogoutButton = () => {
@@ -21,7 +22,7 @@ const Header = () => {
   return (
     <Navbar bg="white" expand="lg" className="shadow-sm">
       <Container>
-        <Navbar.Brand href="/">{t('header.logotype')}</Navbar.Brand>
+        <Navbar.Brand as={Link} to="/">{t('header.logotype')}</Navbar.Brand>
         <LogoutButton />
       </Container>
     </Navbar>

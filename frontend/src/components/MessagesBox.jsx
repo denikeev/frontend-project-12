@@ -1,11 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
-import { messagesSelector } from '../slices/messagesSlice.js';
 
-const MessagesBox = ({ currentChannelId }) => {
-  const allMessages = useSelector(messagesSelector.selectAll);
-  const messages = allMessages.filter((message) => message.channelId === currentChannelId);
-
+const MessagesBox = ({ messages }) => {
   const divRef = useRef();
   useEffect(() => {
     divRef.current.focus();

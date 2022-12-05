@@ -51,11 +51,10 @@ const Rename = ({ onHide, socket, channel }) => {
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
           <FormGroup className="form-group mb-3" controlId="formNameId">
-            <FormControl name="name" data-testid="input-body" type="name" value={formik.values.name} onChange={formik.handleChange} onBlur={formik.handleBlur} ref={inputRef} isInvalid={formik.errors.name} disabled={formik.isSubmitting} />
-            {formik.touched.name && formik.errors.name ? (
+            <FormControl name="name" data-testid="input-body" type="name" value={formik.values.name} onChange={formik.handleChange} ref={inputRef} isInvalid={formik.errors.name} disabled={formik.isSubmitting} aria-label={t('modals.ariaAddInput')} />
+            {formik.errors.name ? (
               <div className="invalid-feedback">{formik.errors.name}</div>
             ) : null}
-            <Form.Control.Feedback type="invalid" />
           </FormGroup>
           <Button className="me-2" variant="secondary" onClick={onHide}>{t('modals.cancel')}</Button>
           <Button onSubmit={formik.handleSubmit} variant="primary" type="submit">{t('modals.submit')}</Button>
