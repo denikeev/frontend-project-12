@@ -1,21 +1,21 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
+import { Element, scroller } from 'react-scroll';
 
 const MessagesBox = ({ messages }) => {
-  const divRef = useRef();
   useEffect(() => {
-    divRef.current.focus();
+    scroller.scrollTo('scrollToElement', { containerId: 'messagesBox' });
   });
 
   return (
-    <div className="overflow-auto px-5">
+    <div className="overflow-auto px-5" id="messagesBox">
       {messages.map((message) => (
         <div className="text-break mb-2" key={message.id}>
           <b>{message.username}</b>
           {`: ${message.body}`}
         </div>
       ))}
-      {/* eslint-disable-next-line jsx-a11y/no-noninteractive-tabindex */}
-      <div tabIndex="0" ref={divRef} />
+
+      <Element name="scrollToElement" />
     </div>
   );
 };
