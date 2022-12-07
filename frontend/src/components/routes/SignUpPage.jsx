@@ -1,12 +1,12 @@
-import axios from 'axios';
 import React, { useState, useEffect, useRef } from 'react';
-import { useFormik } from 'formik';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 import { useRollbar } from '@rollbar/react';
-
+import axios from 'axios';
+import { useFormik } from 'formik';
+import { useTranslation } from 'react-i18next';
 import * as yup from 'yup';
+
 import {
   Container,
   Row,
@@ -16,17 +16,22 @@ import {
   Button,
   FloatingLabel,
 } from 'react-bootstrap';
-import notify from '../notify.js';
-import { logIn } from '../slices/authSlice.js';
-import routes from '../routes.js';
+import notify from '../../notify.js';
+import { logIn } from '../../slices/authSlice.js';
+import routes from '../../routes.js';
+import urls from '../../urls.js';
 
 const SignUpPage = () => {
-  const { t } = useTranslation('translation');
-  const [signUpFailed, setSignUpFailed] = useState(false);
-  const inputRef = useRef();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const rollbar = useRollbar();
+  const navigate = useNavigate();
+  const { t } = useTranslation('translation');
+  const inputRef = useRef();
+  const [signUpFailed, setSignUpFailed] = useState(false);
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
 
   const formik = useFormik({
     initialValues: { username: '', password: '', confirmPassword: '' },
@@ -43,7 +48,7 @@ const SignUpPage = () => {
         localStorage.setItem('userId', JSON.stringify(res.data));
         localStorage.setItem('username', res.data.username);
         dispatch(logIn());
-        navigate('/');
+        navigate(urls.root);
       } catch (err) {
         formik.setSubmitting(false);
         if (err.response && err.response.status === 409) {
@@ -60,10 +65,6 @@ const SignUpPage = () => {
       }
     },
   });
-
-  useEffect(() => {
-    inputRef.current.focus();
-  }, []);
 
   return (
     <Container fluid className="h-100">
@@ -82,11 +83,11 @@ const SignUpPage = () => {
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       value={formik.values.username}
+                      isInvalid={!!formik.errors.username || signUpFailed}
+                      ref={inputRef}
                       name="username"
                       placeholder={t('signUpPage.validation.usernameMinMax')}
                       autoComplete="username"
-                      isInvalid={!!formik.errors.username || signUpFailed}
-                      ref={inputRef}
                     />
                     <Form.Control.Feedback type="invalid" tooltip>{formik.errors.username}</Form.Control.Feedback>
                   </FloatingLabel>
@@ -95,13 +96,12 @@ const SignUpPage = () => {
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       value={formik.values.password}
+                      isInvalid={(formik.touched.password && !!formik.errors.password)
+                        || signUpFailed}
                       name="password"
                       type="password"
                       placeholder={t('signUpPage.validation.passwordMin')}
                       autoComplete="new-password"
-                      aria-describedby="passwordHelpBlock"
-                      isInvalid={(formik.touched.password && !!formik.errors.password)
-                        || signUpFailed}
                     />
                     <Form.Control.Feedback type="invalid" tooltip>{formik.errors.password}</Form.Control.Feedback>
                   </FloatingLabel>
@@ -110,12 +110,12 @@ const SignUpPage = () => {
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       value={formik.values.confirmPassword}
+                      isInvalid={(formik.touched.password && !!formik.errors.confirmPassword)
+                        || signUpFailed}
                       name="confirmPassword"
                       type="password"
                       placeholder={t('signUpPage.validation.passwordsMustMatch')}
                       autoComplete="new-password"
-                      isInvalid={(formik.touched.password && !!formik.errors.confirmPassword)
-                        || signUpFailed}
                     />
                     <Form.Control.Feedback type="invalid" tooltip>{formik.errors.confirmPassword || t('signUpPage.userExist')}</Form.Control.Feedback>
                   </FloatingLabel>

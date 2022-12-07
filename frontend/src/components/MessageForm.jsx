@@ -1,57 +1,59 @@
+import React, { useEffect, useRef } from 'react';
+import filter from 'leo-profanity';
+import { useFormik } from 'formik';
+import { useTranslation } from 'react-i18next';
 import {
   Button,
   Form,
   InputGroup,
 } from 'react-bootstrap';
 
-import React, { useEffect, useRef } from 'react';
-import { useFormik } from 'formik';
-import { useTranslation } from 'react-i18next';
-
 const MessageForm = ({ currentChannelId, socket }) => {
+  filter.loadDictionary('ru');
   const inputRef = useRef();
   const { t } = useTranslation('translation', { keyPrefix: 'chat.messageForm' });
-
-  const formik = useFormik({
-    initialValues: { text: '' },
-    onSubmit: (values, actions) => {
-      const username = localStorage.getItem('username');
-      const message = {
-        body: values.text,
-        username,
-        channelId: currentChannelId,
-      };
-
-      setTimeout(() => {
-        actions.setSubmitting(false);
-      }, 3000);
-
-      socket.volatile.emit('newMessage', message, (response) => {
-        if (response.status === 'ok') {
-          actions.setSubmitting(false);
-          actions.resetForm();
-        }
-      });
-    },
-  });
 
   useEffect(() => {
     inputRef.current.focus();
   }, []);
 
+  const formik = useFormik({
+    initialValues: { text: '' },
+    onSubmit: (values) => {
+      const username = localStorage.getItem('username');
+      const filteredText = filter.clean(values.text);
+      const message = {
+        body: filteredText,
+        username,
+        channelId: currentChannelId,
+      };
+
+      setTimeout(() => {
+        formik.setSubmitting(false);
+      }, 3000);
+
+      socket.volatile.emit('newMessage', message, (response) => {
+        if (response.status === 'ok') {
+          formik.setSubmitting(false);
+          formik.resetForm();
+        }
+      });
+    },
+  });
+
   return (
     <Form onSubmit={formik.handleSubmit} className="py-1 border rounded-2">
       <InputGroup>
         <Form.Control
-          className="border-0 p-0 ps-2"
           onChange={formik.handleChange}
-          name="text"
-          id="text"
           value={formik.values.text}
-          placeholder={t('messagePlaceholder')}
-          aria-label={t('ariaLabel')}
           ref={inputRef}
           disabled={formik.isSubmitting}
+          id="text"
+          className="border-0 p-0 ps-2"
+          name="text"
+          placeholder={t('messagePlaceholder')}
+          aria-label={t('ariaLabel')}
           autoComplete="off"
         />
         <Button className="btn-group-vertical border-0" variant={null} type="submit" disabled={!formik.values.text}>

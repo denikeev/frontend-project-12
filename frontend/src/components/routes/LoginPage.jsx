@@ -1,11 +1,11 @@
-import axios from 'axios';
-import { useRollbar } from '@rollbar/react';
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import axios from 'axios';
+import { useRollbar } from '@rollbar/react';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { useDispatch } from 'react-redux';
-
+import { useTranslation } from 'react-i18next';
 import {
   Form,
   Button,
@@ -15,18 +15,19 @@ import {
   Card,
   FloatingLabel,
 } from 'react-bootstrap';
-import { useTranslation } from 'react-i18next';
-import notify from '../notify.js';
-import { logIn } from '../slices/authSlice.js';
-import routes from '../routes.js';
+
+import routes from '../../routes.js';
+import { logIn } from '../../slices/authSlice.js';
+import notify from '../../notify.js';
+import urls from '../../urls.js';
 
 const LoginPage = () => {
   const dispatch = useDispatch();
   const rollbar = useRollbar();
   const navigate = useNavigate();
-  const [authFailed, setAuthFailed] = useState(false);
   const inputRef = useRef();
   const { t } = useTranslation('translation');
+  const [authFailed, setAuthFailed] = useState(false);
 
   useEffect(() => {
     inputRef.current.focus();
@@ -46,7 +47,7 @@ const LoginPage = () => {
         localStorage.setItem('userId', JSON.stringify(res.data));
         localStorage.setItem('username', res.data.username);
         dispatch(logIn());
-        navigate('/');
+        navigate(urls.root);
       } catch (err) {
         formik.setSubmitting(false);
         if (err.response && err.response.status === 401) {
@@ -81,12 +82,12 @@ const LoginPage = () => {
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       value={formik.values.username}
+                      isInvalid={authFailed}
+                      ref={inputRef}
                       name="username"
                       placeholder={t('loginPage.usernameLabel')}
                       autoComplete="username"
                       required
-                      isInvalid={authFailed}
-                      ref={inputRef}
                     />
                   </FloatingLabel>
                   <FloatingLabel controlId="password" label={t('loginPage.passwordLabel')} className="mb-4">
@@ -94,12 +95,12 @@ const LoginPage = () => {
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       value={formik.values.password}
+                      isInvalid={authFailed}
                       name="password"
                       type="password"
                       placeholder={t('loginPage.passwordLabel')}
                       autoComplete="current-password"
                       required
-                      isInvalid={authFailed}
                     />
                     <Form.Control.Feedback type="invalid" tooltip>{t('loginPage.invalidAuth')}</Form.Control.Feedback>
                   </FloatingLabel>

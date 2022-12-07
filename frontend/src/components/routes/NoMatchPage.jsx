@@ -1,5 +1,6 @@
-import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
+import urls from '../../urls.js';
 
 const NoMatchPage = () => {
   const { t } = useTranslation('translation', { keyPrefix: 'noMatchPage' });
@@ -11,7 +12,7 @@ const NoMatchPage = () => {
       <p className="text-muted">
         {t('switch')}
         {' '}
-        <Link to="/">{t('toMainPage')}</Link>
+        <Link to={urls.root}>{t('toMainPage')}</Link>
       </p>
     </div>
   );

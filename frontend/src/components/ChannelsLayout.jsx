@@ -1,19 +1,17 @@
+import { useSelector } from 'react-redux';
 import {
   Button,
   Col,
   Nav,
-  Dropdown,
-  ButtonGroup,
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useDispatch, useSelector } from 'react-redux';
-import { setCurrentChannel, channelsSelector } from '../slices/channelsSlice.js';
+
+import RenderChannel from './RenderChannel.jsx';
+import { channelsSelector } from '../slices/channelsSlice.js';
 
 const ChannelsLayout = ({ currentChannelId, showModal }) => {
   const { t } = useTranslation('translation', { keyPrefix: 'chat' });
   const channels = useSelector(channelsSelector.selectAll);
-  const dispatch = useDispatch();
-  const getButtonVariant = (id) => (currentChannelId === id ? 'secondary' : null);
 
   return (
     <Col xs={5} sm={4} md={3} xxl={2} className="h-100 border-end pt-5 px-0 bg-light">
@@ -27,30 +25,10 @@ const ChannelsLayout = ({ currentChannelId, showModal }) => {
         </Button>
       </div>
       <Nav className="px-2" as="ul">
-        {channels.map((channel) => (
-          channel.removable ? (
-            <Nav.Item className="w-100" as="li" key={channel.id}>
-              <Dropdown className="d-flex" as={ButtonGroup}>
-                <Button onClick={() => dispatch(setCurrentChannel(channel.id))} className="w-100 rounded-0 text-start text-truncate" variant={getButtonVariant(channel.id)}>
-                  <span className="me-1">#</span>
-                  {channel.name}
-                </Button>
-                <Dropdown.Toggle split variant={getButtonVariant(channel.id)} />
-                <Dropdown.Menu>
-                  <Dropdown.Item onClick={() => showModal('removing', channel)} as="button">{t('deleteChannel')}</Dropdown.Item>
-                  <Dropdown.Item onClick={() => showModal('renaming', channel)} as="button">{t('renameChannel')}</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-            </Nav.Item>
-          ) : (
-            <Nav.Item className="w-100" as="li" key={channel.id}>
-              <Button onClick={() => dispatch(setCurrentChannel(channel.id))} className="w-100 rounded-0 text-start" variant={getButtonVariant(channel.id)}>
-                <span className="me-1">#</span>
-                {channel.name}
-              </Button>
-            </Nav.Item>
-          )
-        ))}
+        {channels
+          .map((channel) => (
+            <RenderChannel props={{ channel, currentChannelId, showModal }} key={channel.id} />
+          ))}
       </Nav>
     </Col>
   );

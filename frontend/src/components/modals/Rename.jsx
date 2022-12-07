@@ -1,3 +1,7 @@
+import React, { useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
 import {
   Modal,
   FormGroup,
@@ -5,11 +9,8 @@ import {
   Button,
   Form,
 } from 'react-bootstrap';
-import React, { useEffect, useRef } from 'react';
-import { useFormik } from 'formik';
-import * as yup from 'yup';
-import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+
 import { channelsSelector } from '../../slices/channelsSlice.js';
 import notify from '../../notify.js';
 
@@ -18,6 +19,7 @@ const Rename = ({ onHide, socket, channel }) => {
   const channels = useSelector(channelsSelector.selectAll);
   const { t } = useTranslation('translation');
   const channelNames = channels.map((el) => el.name);
+
   useEffect(() => {
     inputRef.current.select();
   }, []);
@@ -51,13 +53,30 @@ const Rename = ({ onHide, socket, channel }) => {
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
           <FormGroup className="form-group mb-3" controlId="formNameId">
-            <FormControl name="name" data-testid="input-body" type="name" value={formik.values.name} onChange={formik.handleChange} ref={inputRef} isInvalid={formik.errors.name} disabled={formik.isSubmitting} aria-label={t('modals.ariaAddInput')} />
+            <FormControl
+              onChange={formik.handleChange}
+              value={formik.values.name}
+              isInvalid={formik.errors.name}
+              disabled={formik.isSubmitting}
+              ref={inputRef}
+              name="name"
+              type="name"
+              aria-label={t('modals.ariaAddInput')}
+            />
             {formik.errors.name ? (
               <div className="invalid-feedback">{formik.errors.name}</div>
             ) : null}
           </FormGroup>
-          <Button className="me-2" variant="secondary" onClick={onHide}>{t('modals.cancel')}</Button>
-          <Button onSubmit={formik.handleSubmit} variant="primary" type="submit">{t('modals.submit')}</Button>
+          <Button className="me-2" variant="secondary" onClick={onHide}>
+            {t('modals.cancel')}
+          </Button>
+          <Button
+            onSubmit={formik.handleSubmit}
+            variant="primary"
+            type="submit"
+          >
+            {t('modals.submit')}
+          </Button>
         </Form>
       </Modal.Body>
     </Modal>

@@ -1,25 +1,25 @@
 import React, { useState, useEffect } from 'react';
+import { io } from 'socket.io-client';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   Container,
   Row,
   Col,
 } from 'react-bootstrap';
-import { io } from 'socket.io-client';
-import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import filter from 'leo-profanity';
-import notify from '../notify.js';
-import ChannelsLayout from './ChannelsLayout.jsx';
-import MessageForm from './MessageForm.jsx';
-import MessagesBox from './MessagesBox.jsx';
-import { addMessage, messagesSelector } from '../slices/messagesSlice.js';
+
+import notify from '../../notify.js';
+import getModal from '../modals/index.js';
+import ChannelsLayout from '../ChannelsLayout.jsx';
+import MessageForm from '../MessageForm.jsx';
+import MessagesBox from '../MessagesBox.jsx';
+import { addMessage, messagesSelector } from '../../slices/messagesSlice.js';
 import {
   fetchChannels,
   addChannel,
   deleteChannel,
   renameChannel,
-} from '../slices/channelsSlice.js';
-import getModal from './modals/index.js';
+} from '../../slices/channelsSlice.js';
 
 const socket = io();
 
@@ -39,23 +39,22 @@ const renderModal = (modalInfo, hideModal, socketInstance) => {
 };
 
 const ChatPage = () => {
+  const { t } = useTranslation('translation');
+  const dispatch = useDispatch();
+
   const [modalInfo, setModalInfo] = useState({ type: null, channel: null });
   const hideModal = () => setModalInfo({ type: null, channel: null });
   const showModal = (type, channel = null) => setModalInfo({ type, channel });
-  const dispatch = useDispatch();
-  const { t } = useTranslation('translation');
-  filter.loadDictionary('ru');
+
   const allMessages = useSelector(messagesSelector.selectAll);
-
   const { entities, currentChannelId } = useSelector((state) => state.channels);
-  const currentChannel = entities[currentChannelId];
   const messages = allMessages.filter((message) => message.channelId === currentChannelId);
+  const currentChannel = entities[currentChannelId];
 
-  useEffect(() => {
+  const chatMount = () => {
     dispatch(fetchChannels());
     socket.on('newMessage', (payload) => {
-      const filteredText = filter.clean(payload.body);
-      dispatch(addMessage({ ...payload, body: filteredText }));
+      dispatch(addMessage(payload));
     });
     socket.on('newChannel', (payload) => {
       dispatch(addChannel(payload));
@@ -71,7 +70,9 @@ const ChatPage = () => {
         notify('warn', t('notifications.networkWarn'), { autoClose: 7000 });
       }
     });
-  }, [dispatch, t]);
+  };
+
+  useEffect(chatMount, [dispatch, t]);
 
   return (
     <>
@@ -80,7 +81,6 @@ const ChatPage = () => {
           <ChannelsLayout
             currentChannelId={currentChannelId}
             showModal={showModal}
-            socket={socket}
           />
           <Col className="p-0 h-100">
             <div className="d-flex flex-column h-100">
