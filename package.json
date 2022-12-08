@@ -1,5 +1,5 @@
 {
-  "name": "slack-chat",
+  "name": "@hexlet/code",
   "version": "0.0.1",
   "description": "Chat similar to slack on react",
   "main": "frontend/src/index.js",
