@@ -26,7 +26,7 @@ const RenderChannel = ({ props: { channel, currentChannelId, showModal } }) => {
       {channel.removable ? (
         <Dropdown className="d-flex" as={ButtonGroup}>
           {channelButton()}
-          <Dropdown.Toggle split variant={getButtonVariant(channel.id)} />
+          <Dropdown.Toggle split variant={getButtonVariant(channel.id)} aria-label="Управление каналом" />
           <Dropdown.Menu>
             <Dropdown.Item onClick={() => showModal('removing', channel)} as="button">{t('deleteChannel')}</Dropdown.Item>
             <Dropdown.Item onClick={() => showModal('renaming', channel)} as="button">{t('renameChannel')}</Dropdown.Item>
