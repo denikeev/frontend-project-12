@@ -52,7 +52,7 @@ const Rename = ({ onHide, socket, channel }) => {
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
-          <FormGroup className="form-group mb-3" controlId="formNameId">
+          <FormGroup className="form-group mb-3" controlId="name">
             <FormControl
               onChange={formik.handleChange}
               value={formik.values.name}
@@ -61,8 +61,8 @@ const Rename = ({ onHide, socket, channel }) => {
               ref={inputRef}
               name="name"
               type="name"
-              aria-label={t('modals.ariaAddInput')}
             />
+            <Form.Label className="visually-hidden">{t('modals.labelChannelName')}</Form.Label>
             {formik.errors.name ? (
               <div className="invalid-feedback">{formik.errors.name}</div>
             ) : null}

@@ -36,6 +36,8 @@ export default {
         channels: 'Каналы',
         deleteChannel: 'Удалить',
         renameChannel: 'Переименовать',
+        addChannelLabel: '+',
+        channelSettings: 'Управление каналом',
       },
       header: {
         logotype: 'Hexlet Chat',
@@ -50,7 +52,7 @@ export default {
         confirm: 'Уверены?',
         delete: 'Удалить',
         renameChannel: 'Переименовать канал',
-        ariaAddInput: 'Имя канала',
+        labelChannelName: 'Имя канала',
       },
       notifications: {
         networkWarn: 'Ошибка соединения',

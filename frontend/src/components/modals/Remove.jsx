@@ -37,7 +37,7 @@ const Remove = ({ onHide, socket, channel }) => {
         <p className="lead">{t('modals.confirm')}</p>
         <Form onSubmit={(e) => handleSubmit(e)}>
           <Button className="me-2" variant="secondary" onClick={onHide} disabled={isSubmitting}>{t('modals.cancel')}</Button>
-          <Button variant="primary" type="submit" disabled={isSubmitting}>{t('modals.delete')}</Button>
+          <Button variant="danger" type="submit" disabled={isSubmitting}>{t('modals.delete')}</Button>
         </Form>
       </Modal.Body>
     </Modal>

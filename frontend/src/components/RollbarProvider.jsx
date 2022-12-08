@@ -1,3 +1,4 @@
+import React from 'react';
 import { Provider } from '@rollbar/react';
 
 const rollbarConfig = {

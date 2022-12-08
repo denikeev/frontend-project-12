@@ -64,8 +64,8 @@ const Add = ({ onHide, socket }) => {
               ref={inputRef}
               name="name"
               type="name"
-              aria-label={t('modals.ariaAddInput')}
             />
+            <Form.Label className="visually-hidden">{t('modals.labelChannelName')}</Form.Label>
             {formik.errors.name ? (
               <div className="invalid-feedback">{formik.errors.name}</div>
             ) : null}
