@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import urls from '../../urls.js';
 
 const PrivateRoute = ({ children }) => {
-  const loggedIn = useSelector((state) => state.auth.loggedIn);
+  const loggedIn = useSelector((state) => state.loggedIn);
 
   return (
     loggedIn ? children : <Navigate to={urls.login} />

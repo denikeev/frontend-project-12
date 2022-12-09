@@ -5,20 +5,14 @@ const hasToken = () => {
   return userId && userId.token;
 };
 
-const initialState = {
-  loggedIn: hasToken(),
-};
-
 const authSlice = createSlice({
   name: 'auth',
-  initialState,
+  initialState: !!hasToken(),
   reducers: {
-    logIn: (state) => {
-      state.loggedIn = true;
-    },
-    logOut: (state) => {
+    logIn: () => true,
+    logOut: () => {
       localStorage.removeItem('userId');
-      state.loggedIn = false;
+      return false;
     },
   },
 });

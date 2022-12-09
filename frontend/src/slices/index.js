@@ -6,7 +6,7 @@ import messagesSlice from './messagesSlice.js';
 
 export default configureStore({
   reducer: {
-    auth: authSlice,
+    loggedIn: authSlice,
     channels: channelsSlice,
     messages: messagesSlice,
   },
