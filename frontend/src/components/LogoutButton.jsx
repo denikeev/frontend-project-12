@@ -1,18 +1,16 @@
 import React from 'react';
 import { Button } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
-import { logOut } from '../slices/authSlice.js';
+import useAuth from '../hooks/useAuth.jsx';
 
 const LogoutButton = () => {
-  const dispatch = useDispatch();
-  const loggedIn = useSelector((state) => state.loggedIn);
+  const auth = useAuth();
   const { t } = useTranslation('translation');
 
   return (
-    loggedIn
-      ? <Button onClick={() => dispatch(logOut())}>{t('header.logout')}</Button>
+    auth.loggedIn
+      ? <Button onClick={() => auth.logOut()}>{t('header.logout')}</Button>
       : null
   );
 };

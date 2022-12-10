@@ -59,6 +59,7 @@ export default {
         addChannel: 'Канал создан',
         deleteChannel: 'Канал удалён',
         renameChannel: 'Канал переименован',
+        authorizationErr: 'Ошибка авторизации',
       },
       messagesCount: {
         count_one: '{{count}} сообщение',

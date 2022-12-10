@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import axios from 'axios';
 import { useRollbar } from '@rollbar/react';
 import { useFormik } from 'formik';
@@ -17,16 +16,16 @@ import {
 } from 'react-bootstrap';
 
 import routes from '../../routes.js';
-import { logIn } from '../../slices/authSlice.js';
+import useAuth from '../../hooks/useAuth.jsx';
 import notify from '../../notify.js';
 import urls from '../../urls.js';
 
 const LoginPage = () => {
-  const dispatch = useDispatch();
   const rollbar = useRollbar();
   const navigate = useNavigate();
   const inputRef = useRef();
   const { t } = useTranslation('translation');
+  const auth = useAuth();
   const [authFailed, setAuthFailed] = useState(false);
 
   useEffect(() => {
@@ -44,9 +43,7 @@ const LoginPage = () => {
 
       try {
         const res = await axios.post(routes.loginPath(), values);
-        localStorage.setItem('userId', JSON.stringify(res.data));
-        localStorage.setItem('username', res.data.username);
-        dispatch(logIn());
+        auth.logIn(res.data);
         navigate(urls.root);
       } catch (err) {
         formik.setSubmitting(false);
@@ -59,7 +56,7 @@ const LoginPage = () => {
           notify('warn', t('notifications.networkWarn'), { autoClose: 7000 });
           return;
         }
-        rollbar.error('unknown auth error', err);
+        rollbar.error('unknown login error', err);
         throw err;
       }
     },

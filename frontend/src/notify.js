@@ -13,6 +13,7 @@ const defaultProps = {
 const map = {
   success: toast.success,
   warn: toast.warn,
+  err: toast.error,
 };
 
 export default (type, text, customProp = {}) => {

@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import { useRollbar } from '@rollbar/react';
 import axios from 'axios';
 import { useFormik } from 'formik';
@@ -17,16 +16,16 @@ import {
   FloatingLabel,
 } from 'react-bootstrap';
 import notify from '../../notify.js';
-import { logIn } from '../../slices/authSlice.js';
+import useAuth from '../../hooks/useAuth.jsx';
 import routes from '../../routes.js';
 import urls from '../../urls.js';
 
 const SignUpPage = () => {
-  const dispatch = useDispatch();
   const rollbar = useRollbar();
   const navigate = useNavigate();
   const { t } = useTranslation('translation');
   const inputRef = useRef();
+  const auth = useAuth();
   const [signUpFailed, setSignUpFailed] = useState(false);
 
   useEffect(() => {
@@ -45,9 +44,7 @@ const SignUpPage = () => {
 
       try {
         const res = await axios.post(routes.signUpPath(), { username, password });
-        localStorage.setItem('userId', JSON.stringify(res.data));
-        localStorage.setItem('username', res.data.username);
-        dispatch(logIn());
+        auth.logIn(res.data);
         navigate(urls.root);
       } catch (err) {
         formik.setSubmitting(false);

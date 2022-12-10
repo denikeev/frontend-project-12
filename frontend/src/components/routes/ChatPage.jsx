@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { io } from 'socket.io-client';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState, useEffect, useContext } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   Container,
   Row,
@@ -8,20 +7,13 @@ import {
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
-import notify from '../../notify.js';
+import EntityContext from '../../EntityContext.js';
 import getModal from '../modals/index.js';
 import ChannelsLayout from '../ChannelsLayout.jsx';
 import MessageForm from '../MessageForm.jsx';
 import MessagesBox from '../MessagesBox.jsx';
-import { addMessage, messagesSelector } from '../../slices/messagesSlice.js';
-import {
-  fetchChannels,
-  addChannel,
-  deleteChannel,
-  renameChannel,
-} from '../../slices/channelsSlice.js';
-
-const socket = io();
+import { fetchChannels } from '../../slices/channelsSlice.js';
+import { messagesSelector } from '../../slices/messagesSlice.js';
 
 const renderModal = (modalInfo, hideModal, socketInstance) => {
   if (!modalInfo.type) {
@@ -40,6 +32,7 @@ const renderModal = (modalInfo, hideModal, socketInstance) => {
 
 const ChatPage = () => {
   const { t } = useTranslation('translation');
+  const { socket } = useContext(EntityContext);
   const dispatch = useDispatch();
 
   const [modalInfo, setModalInfo] = useState({ type: null, channel: null });
@@ -51,28 +44,9 @@ const ChatPage = () => {
   const messages = allMessages.filter((message) => message.channelId === currentChannelId);
   const currentChannel = entities[currentChannelId];
 
-  const chatMount = () => {
+  useEffect(() => {
     dispatch(fetchChannels());
-    socket.on('newMessage', (payload) => {
-      dispatch(addMessage(payload));
-    });
-    socket.on('newChannel', (payload) => {
-      dispatch(addChannel(payload));
-    });
-    socket.on('removeChannel', (payload) => {
-      dispatch(deleteChannel(payload.id));
-    });
-    socket.on('renameChannel', (payload) => {
-      dispatch(renameChannel({ id: payload.id, changes: payload }));
-    });
-    socket.on('disconnect', (reason) => {
-      if (reason === 'transport error' || reason === 'transport close') {
-        notify('warn', t('notifications.networkWarn'), { autoClose: 7000 });
-      }
-    });
-  };
-
-  useEffect(chatMount, [dispatch, t]);
+  }, [dispatch]);
 
   return (
     <>
