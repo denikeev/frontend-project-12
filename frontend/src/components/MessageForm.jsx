@@ -13,10 +13,6 @@ const MessageForm = ({ currentChannelId, socket }) => {
   const inputRef = useRef();
   const { t } = useTranslation('translation', { keyPrefix: 'chat.messageForm' });
 
-  useEffect(() => {
-    inputRef.current.focus();
-  }, []);
-
   const formik = useFormik({
     initialValues: { text: '' },
     onSubmit: (values) => {
@@ -40,6 +36,10 @@ const MessageForm = ({ currentChannelId, socket }) => {
       });
     },
   });
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, [currentChannelId, formik.isSubmitting]);
 
   return (
     <Form onSubmit={formik.handleSubmit} className="py-1 border rounded-2">
