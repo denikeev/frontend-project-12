@@ -11,11 +11,14 @@ import {
   Form,
 } from 'react-bootstrap';
 
+import useSocket from '../../hooks/useSocket.jsx';
 import { setCurrentChannel, channelsSelector } from '../../slices/channelsSlice.js';
+import { hideModal } from '../../slices/modalSlice.js';
 import notify from '../../notify.js';
 
-const Add = ({ onHide, socket }) => {
+const Add = () => {
   const dispatch = useDispatch();
+  const socket = useSocket();
   const inputRef = useRef();
   const channels = useSelector(channelsSelector.selectAll);
   const channelNames = channels.map((el) => el.name);
@@ -40,7 +43,7 @@ const Add = ({ onHide, socket }) => {
       socket.volatile.emit('newChannel', { name }, (response) => {
         if (response.status === 'ok') {
           dispatch(setCurrentChannel(response.data.id));
-          onHide();
+          dispatch(hideModal());
           actions.setSubmitting(false);
           notify('success', t('notifications.addChannel'));
         }
@@ -49,7 +52,7 @@ const Add = ({ onHide, socket }) => {
   });
 
   return (
-    <Modal show onHide={onHide}>
+    <Modal show onHide={() => dispatch(hideModal())}>
       <Modal.Header closeButton>
         <Modal.Title>{t('modals.addChannel')}</Modal.Title>
       </Modal.Header>
@@ -70,7 +73,7 @@ const Add = ({ onHide, socket }) => {
               <div className="invalid-feedback">{formik.errors.name}</div>
             ) : null}
           </FormGroup>
-          <Button className="me-2" variant="secondary" onClick={onHide}>
+          <Button className="me-2" variant="secondary" onClick={() => dispatch(hideModal())}>
             {t('modals.cancel')}
           </Button>
           <Button

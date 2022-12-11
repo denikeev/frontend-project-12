@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import {
@@ -11,12 +11,17 @@ import {
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
+import useSocket from '../../hooks/useSocket.jsx';
 import { channelsSelector } from '../../slices/channelsSlice.js';
+import { hideModal } from '../../slices/modalSlice.js';
 import notify from '../../notify.js';
 
-const Rename = ({ onHide, socket, channel }) => {
+const Rename = () => {
+  const socket = useSocket();
+  const dispatch = useDispatch();
   const inputRef = useRef();
   const channels = useSelector(channelsSelector.selectAll);
+  const channel = useSelector((state) => state.modalState.channel);
   const { t } = useTranslation('translation');
   const channelNames = channels.map((el) => el.name);
 
@@ -37,7 +42,7 @@ const Rename = ({ onHide, socket, channel }) => {
 
       socket.volatile.emit('renameChannel', { id: channel.id, name }, (response) => {
         if (response.status === 'ok') {
-          onHide();
+          dispatch(hideModal());
           actions.setSubmitting(false);
           notify('success', t('notifications.renameChannel'));
         }
@@ -46,7 +51,7 @@ const Rename = ({ onHide, socket, channel }) => {
   });
 
   return (
-    <Modal show onHide={onHide}>
+    <Modal show onHide={() => dispatch(hideModal())}>
       <Modal.Header closeButton>
         <Modal.Title>{t('modals.renameChannel')}</Modal.Title>
       </Modal.Header>
@@ -67,7 +72,7 @@ const Rename = ({ onHide, socket, channel }) => {
               <div className="invalid-feedback">{formik.errors.name}</div>
             ) : null}
           </FormGroup>
-          <Button className="me-2" variant="secondary" onClick={onHide}>
+          <Button className="me-2" variant="secondary" onClick={() => dispatch(hideModal())}>
             {t('modals.cancel')}
           </Button>
           <Button

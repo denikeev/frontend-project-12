@@ -7,9 +7,11 @@ import {
   Form,
   InputGroup,
 } from 'react-bootstrap';
+import useSocket from '../hooks/useSocket.jsx';
 
-const MessageForm = ({ currentChannelId, socket }) => {
+const MessageForm = ({ currentChannelId }) => {
   filter.loadDictionary('ru');
+  const socket = useSocket();
   const inputRef = useRef();
   const { t } = useTranslation('translation', { keyPrefix: 'chat.messageForm' });
 

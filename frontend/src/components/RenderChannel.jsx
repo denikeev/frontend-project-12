@@ -9,8 +9,9 @@ import {
 } from 'react-bootstrap';
 
 import { setCurrentChannel } from '../slices/channelsSlice.js';
+import { showModal } from '../slices/modalSlice.js';
 
-const RenderChannel = ({ props: { channel, currentChannelId, showModal } }) => {
+const RenderChannel = ({ props: { channel, currentChannelId } }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation('translation', { keyPrefix: 'chat' });
   const getButtonVariant = (id) => (currentChannelId === id ? 'secondary' : null);
@@ -31,8 +32,8 @@ const RenderChannel = ({ props: { channel, currentChannelId, showModal } }) => {
             <span className="visually-hidden">{t('channelSettings')}</span>
           </Dropdown.Toggle>
           <Dropdown.Menu>
-            <Dropdown.Item onClick={() => showModal('removing', channel)} as="button">{t('deleteChannel')}</Dropdown.Item>
-            <Dropdown.Item onClick={() => showModal('renaming', channel)} as="button">{t('renameChannel')}</Dropdown.Item>
+            <Dropdown.Item onClick={() => dispatch(showModal({ type: 'removing', channel }))} as="button">{t('deleteChannel')}</Dropdown.Item>
+            <Dropdown.Item onClick={() => dispatch(showModal({ type: 'renaming', channel }))} as="button">{t('renameChannel')}</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
       ) : channelButton()}
