@@ -10,8 +10,7 @@ import RollbarProvider from './components/RollbarProvider.jsx';
 import EntityContext from './EntityContext.js';
 import store from './slices/index.js';
 import App from './components/App.jsx';
-import i18n from './i18n.js';
-import notify from './notify.js';
+import './i18n.js';
 
 import { addMessage } from './slices/messagesSlice.js';
 import {
@@ -22,7 +21,7 @@ import {
 
 const socket = io();
 
-const subscribeToSocketEvents = () => {
+const subscribeToChannelEvents = () => {
   socket.on('newMessage', (payload) => {
     store.dispatch(addMessage(payload));
   });
@@ -35,14 +34,9 @@ const subscribeToSocketEvents = () => {
   socket.on('renameChannel', (payload) => {
     store.dispatch(renameChannel({ id: payload.id, changes: payload }));
   });
-  socket.on('disconnect', (reason) => {
-    if (reason === 'transport error' || reason === 'transport close') {
-      notify('warn', i18n('notifications.networkWarn'), { autoClose: 7000 });
-    }
-  });
 };
 
-subscribeToSocketEvents();
+subscribeToChannelEvents();
 
 const Init = () => {
   // const getToken = () => JSON.parse(localStorage.getItem('userId')).token;

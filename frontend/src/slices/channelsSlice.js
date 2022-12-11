@@ -16,12 +16,16 @@ const getAuthHeader = () => {
 
 export const fetchChannels = createAsyncThunk(
   'channels/fetchChannels',
-  async () => {
-    const response = await axios.get(
-      routes.channelsDataPath(),
-      { headers: { ...getAuthHeader() } },
-    );
-    return response.data;
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(
+        routes.channelsDataPath(),
+        { headers: { ...getAuthHeader() } },
+      );
+      return response.data;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
   },
 );
 

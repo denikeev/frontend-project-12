@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
+import { useRollbar } from '@rollbar/react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Container,
@@ -8,6 +9,8 @@ import {
 import { useTranslation } from 'react-i18next';
 
 import EntityContext from '../../EntityContext.js';
+import notify from '../../notify.js';
+import useAuth from '../../hooks/useAuth.jsx';
 import getModal from '../modals/index.js';
 import ChannelsLayout from '../ChannelsLayout.jsx';
 import MessageForm from '../MessageForm.jsx';
@@ -34,6 +37,8 @@ const ChatPage = () => {
   const { t } = useTranslation('translation');
   const { socket } = useContext(EntityContext);
   const dispatch = useDispatch();
+  const auth = useAuth();
+  const rollbar = useRollbar();
 
   const [modalInfo, setModalInfo] = useState({ type: null, channel: null });
   const hideModal = () => setModalInfo({ type: null, channel: null });
@@ -45,8 +50,19 @@ const ChatPage = () => {
   const currentChannel = entities[currentChannelId];
 
   useEffect(() => {
-    dispatch(fetchChannels());
-  }, [dispatch]);
+    dispatch(fetchChannels())
+      .unwrap()
+      .catch((err) => {
+        if (err.error === 'Unauthorized') {
+          notify('err', t('notifications.authorizationErr'), { autoClose: 3000 });
+          setTimeout(() => {
+            auth.logOut();
+          }, 4000);
+        } else {
+          rollbar.error('unknown auth error', err);
+        }
+      });
+  }, [dispatch, t, rollbar]);
 
   return (
     <>
