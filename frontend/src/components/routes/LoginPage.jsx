@@ -28,10 +28,6 @@ const LoginPage = () => {
   const auth = useAuth();
   const [authFailed, setAuthFailed] = useState(false);
 
-  useEffect(() => {
-    inputRef.current.focus();
-  }, []);
-
   const formik = useFormik({
     initialValues: { username: '', password: '' },
     validationSchema: yup.object({
@@ -49,7 +45,7 @@ const LoginPage = () => {
         formik.setSubmitting(false);
         if (err.response && err.response.status === 401) {
           setAuthFailed(true);
-          inputRef.current.select();
+          formik.setTouched({ username: false, password: false });
           return;
         }
         if (err.code === 'ERR_NETWORK') {
@@ -61,6 +57,14 @@ const LoginPage = () => {
       }
     },
   });
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
+
+  useEffect(() => {
+    inputRef.current.select();
+  }, [formik.isSubmitting]);
 
   return (
     <Container fluid className="h-100">
@@ -76,7 +80,10 @@ const LoginPage = () => {
                 <fieldset disabled={formik.isSubmitting}>
                   <FloatingLabel controlId="username" label={t('loginPage.usernameLabel')} className="mb-3">
                     <Form.Control
-                      onChange={formik.handleChange}
+                      onChange={(e) => {
+                        formik.handleChange(e);
+                        setAuthFailed(false);
+                      }}
                       onBlur={formik.handleBlur}
                       value={formik.values.username}
                       isInvalid={authFailed}
@@ -89,7 +96,10 @@ const LoginPage = () => {
                   </FloatingLabel>
                   <FloatingLabel controlId="password" label={t('loginPage.passwordLabel')} className="mb-4">
                     <Form.Control
-                      onChange={formik.handleChange}
+                      onChange={(e) => {
+                        formik.handleChange(e);
+                        setAuthFailed(false);
+                      }}
                       onBlur={formik.handleBlur}
                       value={formik.values.password}
                       isInvalid={authFailed}

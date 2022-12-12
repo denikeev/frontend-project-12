@@ -44,7 +44,7 @@ const Init = () => {
     const userId = JSON.parse(localStorage.getItem('userId'));
     return userId && userId.token;
   };
-  const [loggedIn, setLoggedIn] = useState(!!hasToken);
+  const [loggedIn, setLoggedIn] = useState(!!hasToken());
   const logIn = (data) => {
     localStorage.setItem('userId', JSON.stringify(data));
     localStorage.setItem('username', data.username);

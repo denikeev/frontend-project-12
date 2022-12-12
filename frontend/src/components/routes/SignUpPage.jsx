@@ -28,10 +28,6 @@ const SignUpPage = () => {
   const auth = useAuth();
   const [signUpFailed, setSignUpFailed] = useState(false);
 
-  useEffect(() => {
-    inputRef.current.focus();
-  }, []);
-
   const formik = useFormik({
     initialValues: { username: '', password: '', confirmPassword: '' },
     validationSchema: yup.object({
@@ -50,7 +46,6 @@ const SignUpPage = () => {
         formik.setSubmitting(false);
         if (err.response && err.response.status === 409) {
           setSignUpFailed(true);
-          inputRef.current.select();
           return;
         }
         if (err.code === 'ERR_NETWORK') {
@@ -62,6 +57,10 @@ const SignUpPage = () => {
       }
     },
   });
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
 
   return (
     <Container fluid className="h-100">

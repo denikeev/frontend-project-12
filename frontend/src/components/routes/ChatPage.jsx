@@ -1,10 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRollbar } from '@rollbar/react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   Container,
   Row,
   Col,
+  Spinner,
 } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 
@@ -30,6 +31,7 @@ const ChatPage = () => {
   const dispatch = useDispatch();
   const auth = useAuth();
   const rollbar = useRollbar();
+  const [isDataLoaded, setDataLoaded] = useState(false);
 
   const allMessages = useSelector(messagesSelector.selectAll);
   const { entities, currentChannelId } = useSelector((state) => state.channels);
@@ -40,6 +42,9 @@ const ChatPage = () => {
   useEffect(() => {
     dispatch(fetchChannels())
       .unwrap()
+      .then(() => {
+        setDataLoaded(true);
+      })
       .catch((err) => {
         if (err.error === 'Unauthorized') {
           notify('err', t('notifications.authorizationErr'), { autoClose: 3000 });
@@ -54,27 +59,36 @@ const ChatPage = () => {
 
   return (
     <>
-      <Container className="h-100 my-4 overflow-hidden rounded shadow">
-        <Row className="h-100 bg-white flex-md-row">
-          <ChannelsLayout
-            currentChannelId={currentChannelId}
-          />
-          <Col className="p-0 h-100">
-            <div className="d-flex flex-column h-100">
-              <div className="bg-light mb-4 p-3 shadow-sm small">
-                <p className="m-0">
-                  <b>{`# ${currentChannel?.name}`}</b>
-                </p>
-                <span className="text-muted">{t('messagesCount.count', { count: messages.length })}</span>
+      {isDataLoaded ? (
+        <Container className="h-100 my-4 overflow-hidden rounded shadow">
+          <Row className="h-100 bg-white flex-md-row">
+            <ChannelsLayout
+              currentChannelId={currentChannelId}
+            />
+            <Col className="p-0 h-100">
+              <div className="d-flex flex-column h-100">
+                <div className="bg-light mb-4 p-3 shadow-sm small">
+                  <p className="m-0">
+                    <b>{`# ${currentChannel?.name}`}</b>
+                  </p>
+                  <span className="text-muted">{t('messagesCount.count', { count: messages.length })}</span>
+                </div>
+                <MessagesBox messages={messages} />
+                <div className="mt-auto px-2 px-sm-3 px-md-5 py-3">
+                  <MessageForm currentChannelId={currentChannelId} />
+                </div>
               </div>
-              <MessagesBox messages={messages} />
-              <div className="mt-auto px-2 px-sm-3 px-md-5 py-3">
-                <MessageForm currentChannelId={currentChannelId} />
-              </div>
-            </div>
-          </Col>
-        </Row>
-      </Container>
+            </Col>
+          </Row>
+        </Container>
+      )
+        : (
+          <div className="h-100 d-flex justify-content-center align-items-center">
+            <Spinner animation="border" variant="primary" role="status">
+              <span className="visually-hidden">{t('chat.dataLoading')}</span>
+            </Spinner>
+          </div>
+        )}
       {renderModal(modalState)}
     </>
   );

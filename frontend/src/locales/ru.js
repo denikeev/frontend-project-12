@@ -38,6 +38,7 @@ export default {
         renameChannel: 'Переименовать',
         addChannelLabel: '+',
         channelSettings: 'Управление каналом',
+        dataLoading: 'Загрузка...',
       },
       header: {
         logotype: 'Hexlet Chat',
