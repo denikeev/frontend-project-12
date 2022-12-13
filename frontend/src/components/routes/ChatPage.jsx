@@ -55,6 +55,7 @@ const ChatPage = () => {
           rollbar.error('unknown auth error', err);
         }
       });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, t, rollbar]);
 
   return (
