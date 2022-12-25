@@ -25,7 +25,7 @@ const App = () => {
 
   useEffect(() => {
     socket.on('disconnect', (reason) => {
-      if (reason === 'transport error' || reason === 'transport close') {
+      if (reason === 'transport error') {
         notify('warn', t('notifications.networkWarn'), { autoClose: 7000 });
       }
     });
