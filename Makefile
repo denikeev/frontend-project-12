@@ -12,3 +12,6 @@ start:
 
 lint-frontend:
 	make -C frontend lint
+
+test-e2e:
+	npx playwright test
